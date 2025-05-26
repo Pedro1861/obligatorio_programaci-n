@@ -1,4 +1,5 @@
-class cliente:
+from abc import ABC, abstractmethod
+class cliente(ABC):
     def __init__(self, telefono, correo_electrónico):
         self.telefono=telefono
         self.correo_electrónico=correo_electrónico
