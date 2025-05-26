@@ -15,3 +15,5 @@ while menu!=3:
             raise ValueError
     print("\n1. Registrar\n2. Listar\n3. Salir del sistema")
     menu=int(input("\nElija nuevamente su accion a realizar: "))
+
+print('prueba')
