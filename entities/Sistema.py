@@ -2,7 +2,7 @@ import random
 from Pieza import Pieza
 from exceptions.Errores import FueraDeRango
 from Requerimiento import Requerimiento
-
+from cliente import ClienteParticular, Empresa
 
 ###REGISTROS###
 
@@ -70,11 +70,33 @@ def registrar_maquina(lista_maquinas):
             raise FueraDeRango
             
             
-
-
-
-
 #CLIENTE#
+    def __init__(self):
+        self.clientes=[]
+        self.ID_cliente=1
+    def registrar_cliente(self):
+        print("Tipo cliente: \n 1. Cliente Particular \n 2. Empresea")
+        tipo=int(input("Seleccione tipo de cliente: "))
+        if tipo==1:
+            cédula= int(input("ingrese la cédula del cliente: "))
+            nombre=input("ingrese nombre completo del cliente: ")
+            teléfono=int(input("ingrese el teléfono del cliente: "))
+            correo_electrónico= input("ingrese el correo electrónico del cliente: ")
+            cliente=ClienteParticular(self.ID_cliente,cédula,nombre,teléfono,correo_electrónico)
+            self.clientes.append(cliente)
+        if tipo==2:
+            rut=int(input("Ingrese número de RUT: "))
+            nombre=input("Ingrese nombre: ")
+            página_web=input("Ingrese página web: ")
+            teléfono=input("Ingrese teléfono de contacto: ")
+            correo_electrónico= input("ingrese el correo electrónico del cliente: ")
+            cliente=Empresa(self.ID_cliente,rut,nombre,página_web,teléfono,correo_electrónico)
+            self.clientes.append(cliente)
+        else:
+            raise ValueError
+        self.ID_cliente+=1
+
+        
 #REPOSICION#
 ###LISTADOS###
 #CLIENTES#
