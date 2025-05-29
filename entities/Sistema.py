@@ -1,18 +1,12 @@
 
-from Pieza import Pieza
+from entities.Pieza import Pieza
 from exceptions.Errores import FueraDeRango
-from Requerimiento import Requerimiento
-from Maquina import Maquina
-from Cliente import Persona, Empresa
+from entities.Requerimiento import Requerimiento
+from entities.Maquina import Maquina
+from entities.Cliente import ClienteParticular, Empresa
 
 ###REGISTROS###
 
-codigos_generados = 0
-
-def generar_codigo():
-    codigo= codigos_generados+1
-    codigos_generados=codigo
-    return codigo
 
 
 
@@ -22,7 +16,7 @@ class Sistema():
     lista_maquinas=[]
     lista_pedidos=[]
     lista_clientes=[]
-
+    lista_requerimientos=[]
 
     
     ####PIEZA####
@@ -37,27 +31,8 @@ class Sistema():
     ####PIEZAS####
     
     ####MAQUINAS###
-    def registrar_maquina(lista_maquinas,lista_piezas):
-        lista_requerimientos=[]
-        print("Comenzemos con sus requerimientos...\n")
-        print(lista_piezas)
-        code=int(input("ingrese el codigo de la pieza requerida: "))
-        nuevo_requerimiento=1
-        while nuevo_requerimiento==1:
-            nueva_pieza=0
-            for i in lista_piezas:
-                if i.codigo==code:
-                    nueva_pieza=i
-            while nueva_pieza==0:
-                print("El codigo no pertenece a ninguna pieza")
-                code=int(input("ingrese el codigo de la pieza requerida: "))
-                for i in lista_piezas:
-                    if i.codigo==code:
-                        nueva_pieza=i
-            cantidad_piezas=int(input("Ingrese la cantidad de piezas necesarias: "))      
-            nuevo_requerimiento=int(input("Desea agregar un nuevo requerimiento?\n 1.SI\n 2.NO"))
-            if nuevo_requerimiento!=1 and nuevo_requerimiento!=0:
-                raise FueraDeRango
+    def registrar_maquina(self):
+        pass
     def listar_maquinas():
         pass
     ####MAQUINAS####
@@ -80,11 +55,9 @@ class Sistema():
     ####REPOSICION####
     
     
-    #PEDIDOS#
+    ####PEDIDOS####
     def registrar_pedido():
         pass
 
     def listar_pedido():
         pass
-   
-    #CONTABILIDAD#
