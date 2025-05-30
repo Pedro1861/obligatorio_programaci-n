@@ -1,8 +1,8 @@
 class Maquina():
     def __init__(self,codigo_maquina,descripcion,requerimiento):
-        self.code=codigo_maquina
+        self.codigo=codigo_maquina
         self.requerimiento=requerimiento
-        self.descripcion=descripcion
+        self.desc=descripcion
 
     def disponibilidad(self,disponible):
         if self.cantidad>=disponible:
