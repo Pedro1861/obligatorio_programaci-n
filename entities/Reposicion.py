@@ -1,8 +1,8 @@
 from datetime import datetime
 
-class Reposición:
+class Reposicion:
     def __init__(self, pieza, cantidad_lotes):
-        self.pieza = pieza.code
+        self.pieza = pieza
         self.cantidad_lotes = cantidad_lotes
         self.fecha = datetime.today()
         

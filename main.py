@@ -106,16 +106,16 @@ while menu!=3:
 
                 print("Comenzemos con sus requerimientos...\n")
                 sistema.listar_piezas()
-                code=int(input("ingrese el codigo de la pieza requerida: "))
-                while True:
-                    try:
-                        code=int(input("ingrese el codigo de la pieza requerida: "))
-                        break
-                    except ValueError:
-                        print("\nError!Elija un valor adecuado\n")
+                
                                   
                 nuevo_requerimiento=1
                 while nuevo_requerimiento==1:
+                    while True:
+                        try:
+                            code=int(input("ingrese el codigo de la pieza requerida: "))
+                            break
+                        except ValueError:
+                            print("\nError!Elija un valor adecuado\n")
                     nueva_pieza=0
                     for i in sistema.lista_piezas:
                         if i.codigo==code:
@@ -129,7 +129,7 @@ while menu!=3:
                             except ValueError:
                                 print("\nError!Elija un valor adecuado\n")
                                 
-                        for i in Sistema.lista_piezas:
+                        for i in sistema.lista_piezas:
                             if i.codigo==code:
                                 nueva_pieza=i
                     while True:
@@ -185,9 +185,12 @@ while menu!=3:
 
                 while True:
                     try:
+                        cantidad_lotes=int(input("Ingrese la cantidad de lotes a reabastecer: "))
+                        break
+                    except ValueError:
+                        print("\nError! Elija un valor adecuado\n")
                         pass
-                    except:
-                        pass
+                sistema.registrar_reposicion(pieza_repuesta,cantidad_lotes)
             elif registrar==6:
                         pass
         elif menu==2:

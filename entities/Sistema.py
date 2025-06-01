@@ -4,7 +4,7 @@ from exceptions.Errores import FueraDeRango
 from entities.Requerimiento import Requerimiento
 from entities.Maquina import Maquina
 from entities.Cliente import ClienteParticular, Empresa
-from Reposicion import Reposición
+from entities.Reposicion import Reposicion
 ###REGISTROS###
 
 
@@ -21,9 +21,9 @@ class Sistema():
     
     ####PIEZA####
     
-    def registrar_pieza(self,codigo,desc_pieza,costo_pieza,cantidad_pieza,lote_pieza):
+    def registrar_pieza(self,desc_pieza,costo_pieza,cantidad_pieza,lote_pieza):
 
-        pieza0=Pieza(codigo,desc_pieza,costo_pieza,cantidad_pieza,lote_pieza)
+        pieza0=Pieza(desc_pieza,costo_pieza,cantidad_pieza,lote_pieza)
         self.lista_piezas.append(pieza0)
     
     @classmethod
@@ -56,7 +56,7 @@ class Sistema():
 
     ####REPOSICION####
     def registrar_reposicion(self,pieza,cantidad_lotes):
-        reposicion0=Reposición(pieza,cantidad_lotes)
+        reposicion0=Reposicion(pieza,cantidad_lotes)
         pieza.reposicion.append(reposicion0)
         pieza.cantidad+=cantidad_lotes*pieza.lote
         print(f"Costo de reposicion: {reposicion0.get_costo()}\nCantidad disponible de Pieza({reposicion0.pieza}): {pieza.cantidad }")
