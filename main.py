@@ -60,6 +60,13 @@ while menu!=3:
                 print("Comenzemos con sus requerimientos...\n")
                 print(Sistema.lista_piezas)
                 code=int(input("ingrese el codigo de la pieza requerida: "))
+                while True:
+                    try:
+                        code=int(input("ingrese el codigo de la pieza requerida: "))
+                        break
+                    except ValueError:
+                        print("\nError!Elija un valor adecuado\n")
+                        code=int(input("ingrese el codigo de la pieza requerida: "))              
                 nuevo_requerimiento=1
                 while nuevo_requerimiento==1:
                     nueva_pieza=0
@@ -97,10 +104,6 @@ while menu!=3:
                         except FueraDeRango:
                             print("\nError! Indice fuera de rango")
                             nuevo_requerimiento=int(input("Desea agregar un nuevo requerimiento?\n 1.SI\n 2.NO\n___:"))
-                            
-                    
-                    
-                pass
             elif registrar==3:
                 while True:
                     try:
