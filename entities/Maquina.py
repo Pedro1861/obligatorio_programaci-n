@@ -1,6 +1,6 @@
 class Maquina():
     contador_maquina=0
-    def __init__(self,descripcion,requerimiento):
+    def __init__(self,descripcion,requerimiento=[]):
         self.codigo=Maquina.contador_maquina
         Maquina.contador_maquina+=1
         self.requerimiento=requerimiento

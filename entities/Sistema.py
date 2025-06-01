@@ -31,8 +31,9 @@ class Sistema():
     ####PIEZAS####
     
     ####MAQUINAS###
-    def registrar_maquina(self):
-        pass
+    def registrar_maquina(self,descripcion):
+        maquina0=Maquina(descripcion)
+        self.lista_maquinas.append(maquina0)
     def listar_maquinas():
         pass
     ####MAQUINAS####

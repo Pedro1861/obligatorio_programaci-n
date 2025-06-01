@@ -22,11 +22,15 @@ while menu!=3:
                         if nueva_desc!=1 and nueva_desc!=2:
                             raise FueraDeRango
 
-                        if nueva_desc==1:
-                            desc_pieza=input("Ingrese una descripcion valida: ")
-                            while  desc_pieza==i.desc:
-                                print("ERROR: La descripcion sigue siendo igual")
+                        elif nueva_desc==1:
+                            verificado=1
+                            while verificado==1:
                                 desc_pieza=input("Ingrese una descripcion valida: ")
+                                for j in sistema.lista_piezas:
+                                    if desc_pieza==j.desc:
+                                        print("\nEEROR!La descripcion de la pieza sigue siendo igual\n")
+                                    else:
+                                        verificado=2
 
                         elif nueva_desc==2:
                             abortar=True
@@ -39,24 +43,58 @@ while menu!=3:
                         break
                     except ValueError:
                         print("\nError!Elija un valor adecuado\n")
-                        costo_pieza=int(input("Brinda un nuevo costo por unidad de la pieza: "))
+                        
                 while True:
                     try:
                         lote_pieza=int(input("Brinda el tamanio del lote de reposicion: "))
                         break
                     except ValueError:
                         print("\nError!Elija un valor adecuado\n")
-                        lote_pieza=int(input("Brinda el tamanio del lote de reposicion: "))
+                        
                 while True:
                     try:
                         cantidad_pieza=int(input("Brinda una nueva cantidad inicial de piezas: "))
                         break
                     except ValueError:
                         print("\nError!Elija un valor adecuado\n")
-                        cantidad_pieza=int(input("Brinda una nueva cantidad inicial de piezas: "))
+                        
 
                 sistema.registrar_pieza(desc_pieza,costo_pieza,cantidad_pieza,lote_pieza)
             elif registrar==2:
+                while True:
+                    try:
+                        descripcion_maquina=input("Ingrese la descripcion de la nueva maquina: ")
+                        abortar=False
+                        for i in sistema.lista_maquinas:
+                            if i.desc==descripcion_maquina:
+                                while True:
+                                    try:
+                                        nueva_desc=int(input("ERROR:La maquina ya existe.\n Si desea poner otra descripcion, ingrese 1\n Si desea abortar la operacion ingrese 2\n__:"))
+                                        if nueva_desc!=1 or nueva_desc!=0:
+                                            raise FueraDeRango
+                                        elif nueva_desc==1:
+                                            verificado=1
+                                            descripcion_maquina=input("Ingrese una nueva descripcion valida para la maquina: ")
+                                            while verificado==1:
+                                                for j in descripcion_maquina:
+                                                    if j.desc==descripcion_maquina:
+                                                        print("ERROR! La descripcion sigue siendo igual")
+                                                    else:
+                                                        verificado=2
+                                        elif nueva_desc==2:
+                                            abortar=True
+                                        break
+                                    except ValueError:
+                                        print("\nError!Elija un valor adecuado\n")
+                                    except FueraDeRango:
+                                        print("\nError!Valor de indice fuera de rango\n")
+                            if abortar:
+                                continue
+                        break
+                    except ValueError:
+                        print("\nError!Elija un valor adecuado\n")
+                sistema.lista_maquinas.append(sistema.registrar_maquina(descripcion_maquina))
+
                 print("Comenzemos con sus requerimientos...\n")
                 print(Sistema.lista_piezas)
                 code=int(input("ingrese el codigo de la pieza requerida: "))
@@ -66,7 +104,7 @@ while menu!=3:
                         break
                     except ValueError:
                         print("\nError!Elija un valor adecuado\n")
-                        code=int(input("ingrese el codigo de la pieza requerida: "))              
+                                  
                 nuevo_requerimiento=1
                 while nuevo_requerimiento==1:
                     nueva_pieza=0
@@ -81,7 +119,7 @@ while menu!=3:
                                 break
                             except ValueError:
                                 print("\nError!Elija un valor adecuado\n")
-                                code=int(input("ingrese el codigo de la pieza requerida: "))
+                                
                         for i in Sistema.lista_piezas:
                             if i.codigo==code:
                                 nueva_pieza=i
@@ -91,7 +129,7 @@ while menu!=3:
                             break
                         except ValueError:
                             print("\nError!Elija un valor adecuado\n")
-                            cantidad_piezas=int(input("Ingrese la cantidad de piezas necesarias: "))  
+                    
                     while True:
                         try:
                             nuevo_requerimiento=int(input("Desea agregar un nuevo requerimiento?\n 1.SI\n 2.NO\n___:"))
@@ -100,10 +138,10 @@ while menu!=3:
                             break
                         except ValueError:
                             print("\nError!Elija un valor adecuado\n")
-                            nuevo_requerimiento=int(input("Desea agregar un nuevo requerimiento?\n 1.SI\n 2.NO\n___:"))
+                      
                         except FueraDeRango:
                             print("\nError! Indice fuera de rango")
-                            nuevo_requerimiento=int(input("Desea agregar un nuevo requerimiento?\n 1.SI\n 2.NO\n___:"))
+        
             elif registrar==3:
                 while True:
                     try:
@@ -123,10 +161,6 @@ while menu!=3:
                     except:
                         pass
             elif registrar==6:
-                while True:
-                    try:
-                        pass
-                    except:
                         pass
         elif menu==2:
             print("\nListar: \n 1. Clientes\n 2. Pedidos\n 3. Cliente\n 4. Pedido\n 5. Reposicion\n 6. Salir")
