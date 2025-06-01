@@ -1,4 +1,4 @@
-from exceptions.Errores import FueraDeRango
+from exceptions.Errores import FueraDeRango, NoExiste
 from entities.Sistema import Sistema
 sistema=Sistema()  
 
@@ -117,7 +117,7 @@ while menu!=3:
                 nuevo_requerimiento=1
                 while nuevo_requerimiento==1:
                     nueva_pieza=0
-                    for i in Sistema.lista_piezas:
+                    for i in sistema.lista_piezas:
                         if i.codigo==code:
                             nueva_pieza=i
                     while nueva_pieza==0:
@@ -168,12 +168,21 @@ while menu!=3:
                 while True:
                     try:
                         code=int(input("Ingrese el codigo de la Pieza que desea reponer: "))
+                        noexiste=True
+                        for i in sistema.lista_piezas:
+                            if code==i.codigo:
+                                pieza_repuesta=i
+                                noexiste=False
+                        if noexiste:
+                            raise NoExiste
+                        
                         break
                     except ValueError:
-                        ("\nError!Elija un valor adecuado\n")
-                for i in sistema.lista_piezas:
-                    if code==i.codigo:
-                        pass##ACA##
+                        print("\nError! Elija un valor adecuado\n")
+                    except NoExiste:
+                        print("\nError! Ese codigo de pieza no existe\n")
+                        
+
                 while True:
                     try:
                         pass
