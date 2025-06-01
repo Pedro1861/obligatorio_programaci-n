@@ -3,7 +3,16 @@ from entities.Sistema import Sistema
 sistema=Sistema()  
 
 print("\n1. Registrar\n2. Listar\n3. Salir del sistema")
-menu=int(input("\nElija su accion a realizar: "))
+while True:
+    try:
+        menu=int(input("\nElija su accion a realizar: "))
+        if menu<1 or menu>3:
+            raise FueraDeRango
+        break
+    except ValueError:
+        print("\nError!Elija un valor adecuado\n")
+    except FueraDeRango:
+        print("\nError!Elija un indice de los mostrados en pantalla\n")
 while menu!=3:
     if menu<1 or menu>3:
         raise FueraDeRango
@@ -96,7 +105,7 @@ while menu!=3:
                 sistema.lista_maquinas.append(sistema.registrar_maquina(descripcion_maquina))
 
                 print("Comenzemos con sus requerimientos...\n")
-                print(Sistema.lista_piezas)
+                sistema.listar_piezas()
                 code=int(input("ingrese el codigo de la pieza requerida: "))
                 while True:
                     try:
@@ -155,6 +164,16 @@ while menu!=3:
                     except:
                         pass
             elif registrar==5:
+                sistema.listar_piezas()
+                while True:
+                    try:
+                        code=int(input("Ingrese el codigo de la Pieza que desea reponer: "))
+                        break
+                    except ValueError:
+                        ("\nError!Elija un valor adecuado\n")
+                for i in sistema.lista_piezas:
+                    if code==i.codigo:
+                        pass##ACA##
                 while True:
                     try:
                         pass
@@ -163,7 +182,7 @@ while menu!=3:
             elif registrar==6:
                         pass
         elif menu==2:
-            print("\nListar: \n 1. Clientes\n 2. Pedidos\n 3. Cliente\n 4. Pedido\n 5. Reposicion\n 6. Salir")
+            print("\nListar: \n 1. Clientes\n 2. Pedidos\n 3. Cliente\n 4. Pedido\n 5. Contabilidad\n 6. Salir")
             listar=int(input("\nIngrese indice de elemento a listar: "))
             if listar<1 or listar>6:
                 raise ValueError
@@ -199,7 +218,14 @@ while menu!=3:
                          pass
             elif listar==6:
                 pass
-        elif menu==3:
-            break
         print("\n1. Registrar\n2. Listar\n3. Salir del sistema")
-        menu = int(input("\nElija su accion a realizar: "))
+        while True:
+            try:
+                menu=int(input("\nElija su accion a realizar: "))
+                if menu<1 or menu>3:
+                    raise FueraDeRango
+                break
+            except ValueError:
+                print("\nError!Elija un valor adecuado\n")
+            except FueraDeRango:
+                print("\nError!Elija un indice de los mostrados en pantalla\n")
