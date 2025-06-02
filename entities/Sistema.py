@@ -57,11 +57,40 @@ class Sistema():
 
 
     ####CLIENTE####
-    def registrar_cliente():
-        pass
+    def registrar_cliente(self):
+        print("Tipo cliente: \n 1. Cliente Particular \n 2. Empresea")
+        tipo=int(input("Seleccione tipo de cliente: "))
+        if tipo==1:
+            cédula= int(input("ingrese la cédula del cliente: "))
+            for particular in self.lista_particulares:
+                if particular.cédula == cédula:
+                    cédula=int(input("ERROR: la cédula ya está regitrada. \n Ingrese una nueva cédula: "))
+                    return
+            nombre=input("ingrese nombre completo del cliente: ")
+            teléfono=int(input("ingrese el teléfono del cliente: "))
+            correo_electrónico= input("ingrese el correo electrónico del cliente: ")
+            cliente=ClienteParticular(self.ID_cliente,cédula,nombre,teléfono,correo_electrónico)
+            self.lista_clientes.append(cliente)
+            self.lista_particulares.append(cliente)
+        elif tipo==2:
+            rut=int(input("Ingrese número de RUT: "))
+            for empresa in self.lista_empresas:
+                if empresa.rut == rut:
+                rut=int(input("ERROR: el RUT ya está regitrado. \n Ingrese un nuevo número de RUT: "))                    return
+            nombre=input("Ingrese nombre: ")
+            página_web=input("Ingrese página web: ")
+            teléfono=input("Ingrese teléfono de contacto: ")
+            correo_electrónico= input("ingrese el correo electrónico del cliente: ")
+            cliente=Empresa(self.ID_cliente,rut,nombre,página_web,teléfono,correo_electrónico)
+            self.lista_clientes.append(cliente)
+            self.lista_empresas.append(cliente)
+        else:
+            raise ValueError
+        self.ID_cliente+=1
 
-    def listar_cliente():
-        pass
+    def listar_clientes(self):
+        for i in range (len(self.lista_clientes)):
+            print (self.lista_clientesclientes[i])
     ####CLIENTE####
 
     ####REPOSICION####
