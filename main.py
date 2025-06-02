@@ -1,5 +1,5 @@
-from exceptions.Errores import FueraDeRango, NoExiste
-from entities.Sistema import Sistema
+from exceptions.errores import FueraDeRango, NoExiste
+from entities.sistema import Sistema
 sistema=Sistema()  
 
 print("\n1. Registrar\n2. Listar\n3. Salir del sistema")
@@ -15,8 +15,7 @@ while True:
         print("\nError!Elija un indice de los mostrados en pantalla\n")
 while menu!=3:
     copia_piezas=sistema.lista_piezas
-    if menu<1 or menu>3:
-        raise FueraDeRango
+
     while menu!=3:
         if menu==1:
             print("\nRegistrar:\n 1. Pieza\n 2. Maquina\n 3. Cliente\n 4. Pedido\n 5. Reposicion\n 6. Salir")
@@ -80,15 +79,16 @@ while menu!=3:
                                 while True:
                                     try:
                                         nueva_desc=int(input("ERROR:La maquina ya existe.\n Si desea poner otra descripcion, ingrese 1\n Si desea abortar la operacion ingrese 2\n__:"))
-                                        if nueva_desc!=1 or nueva_desc!=0:
+                                        if nueva_desc!=1 and nueva_desc!=2:
                                             raise FueraDeRango
                                         elif nueva_desc==1:
                                             verificado=1
                                             descripcion_maquina=input("Ingrese una nueva descripcion valida para la maquina: ")
                                             while verificado==1:
-                                                for j in descripcion_maquina:
-                                                    if j.desc==descripcion_maquina:
+                                                for j in sistema.lista_maquinas:
+                                                    if j.desc == descripcion_maquina:
                                                         print("ERROR! La descripcion sigue siendo igual")
+                                                        break
                                                     else:
                                                         verificado=2
                                         elif nueva_desc==2:
@@ -99,11 +99,10 @@ while menu!=3:
                                     except FueraDeRango:
                                         print("\nError!Valor de indice fuera de rango\n")
                             if abortar:
-                                continue
-                        break
+                                break
                     except ValueError:
                         print("\nError!Elija un valor adecuado\n")
-                sistema.registrar_maquina(descripcion_maquina)
+
                 maquina0=sistema.registrar_maquina(descripcion_maquina)
 
                 print("Comenzemos con sus requerimientos...\n")
@@ -123,12 +122,12 @@ while menu!=3:
                             break
                         except ValueError:
                             print("\nError!Elija un valor adecuado\n")
-                    nueva_pieza=0
+                    nueva_pieza=None
                     for i in copia_piezas:
                         if i.codigo==code:
                             nueva_pieza=i
                             copia_piezas.remove(i)
-                    while nueva_pieza==0:
+                    while nueva_pieza is None:
                         print("El codigo no pertenece a ninguna pieza")
                         while True:
                             try:
