@@ -5,7 +5,6 @@ class Maquina():
         Maquina.contador_maquina+=1
         self.requerimiento=requerimiento
         self.desc=descripcion
-
     def disponibilidad(self,disponible):
         if self.cantidad>=disponible:
             return True
@@ -16,5 +15,8 @@ class Maquina():
         self.requerimiento.append(nuevo_req)
     
     def costo_produccion(self):
-        self.requerimiento
+        costo=0
+        for i in self.requerimiento:
+            costo+=i.cantidad*i.pieza.costo
+        return costo
         

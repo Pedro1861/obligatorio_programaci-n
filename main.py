@@ -14,6 +14,7 @@ while True:
     except FueraDeRango:
         print("\nError!Elija un indice de los mostrados en pantalla\n")
 while menu!=3:
+    copia_piezas=sistema.lista_piezas
     if menu<1 or menu>3:
         raise FueraDeRango
     while menu!=3:
@@ -102,14 +103,20 @@ while menu!=3:
                         break
                     except ValueError:
                         print("\nError!Elija un valor adecuado\n")
-                sistema.lista_maquinas.append(sistema.registrar_maquina(descripcion_maquina))
+                sistema.registrar_maquina(descripcion_maquina)
+                maquina0=sistema.registrar_maquina(descripcion_maquina)
 
                 print("Comenzemos con sus requerimientos...\n")
-                sistema.listar_piezas()
+                
                 
                                   
                 nuevo_requerimiento=1
                 while nuevo_requerimiento==1:
+                    if copia_piezas==[]:
+                            print("\nError! No existen piezas registradas, no se puede registrar maquinas\n")
+                            break
+                    for i in copia_piezas:
+                        print(f"\n Codigo: {i.codigo}\n Descripcion: {i.desc}\n Costo: {i.costo}\n Cantidad: {i.cantidad}\n Lote: {i.lote}\n")  
                     while True:
                         try:
                             code=int(input("ingrese el codigo de la pieza requerida: "))
@@ -117,9 +124,10 @@ while menu!=3:
                         except ValueError:
                             print("\nError!Elija un valor adecuado\n")
                     nueva_pieza=0
-                    for i in sistema.lista_piezas:
+                    for i in copia_piezas:
                         if i.codigo==code:
                             nueva_pieza=i
+                            copia_piezas.remove(i)
                     while nueva_pieza==0:
                         print("El codigo no pertenece a ninguna pieza")
                         while True:
@@ -132,12 +140,15 @@ while menu!=3:
                         for i in sistema.lista_piezas:
                             if i.codigo==code:
                                 nueva_pieza=i
+                                copia_piezas.remove(i)
                     while True:
                         try:
                             cantidad_piezas=int(input("Ingrese la cantidad de piezas necesarias: "))
                             break
                         except ValueError:
                             print("\nError!Elija un valor adecuado\n")
+                    nuevo_req=(maquina0,nueva_pieza,cantidad_piezas)
+                    maquina0.agregar_requerimiento(nuevo_req)
                     
                     while True:
                         try:

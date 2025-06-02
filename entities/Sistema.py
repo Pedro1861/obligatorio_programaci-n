@@ -30,7 +30,7 @@ class Sistema():
     def listar_piezas(cls):
         print("Piezas: ")
         for i in cls.lista_piezas:
-            print(f"\n Codigo: {i.codigo}\n Descripcion: {i.desc}\n Costo: {i.costo}\n Cantidad: {i.cantidad}\n Lote: {i.lote}\n Reposiciones: {i.reposicion}\n")
+            print(f"\n Codigo: {i.codigo}\n Descripcion: {i.desc}\n Costo: {i.costo}\n Cantidad: {i.cantidad}\n Lote: {i.lote}\n")
 
     ####PIEZAS####
     
@@ -38,8 +38,18 @@ class Sistema():
     def registrar_maquina(self,descripcion):
         maquina0=Maquina(descripcion)
         self.lista_maquinas.append(maquina0)
-    def listar_maquinas():
-        pass
+        return maquina0
+    @classmethod
+    def listar_maquinas(cls):
+        print("Maquinas: \n")
+        for i in cls.lista_maquinas:
+            reqs=[]
+            print(f"\nCodigo:{i.codigo}\nDescripcion:{i.desc}\nRequerimientos:")
+            for j in cls.lista_requerimientos:
+                if i==j.maquina:
+                    print(f" \nCodigo Pieza:{j.pieza.codigo}\n Cantidad: {j.cantidad}\n")
+            print(f"Costo: {i.costo_produccion}")
+        
     ####MAQUINAS####
                 
 
