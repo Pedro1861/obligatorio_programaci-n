@@ -19,9 +19,16 @@ while menu!=3:
     while menu!=3:
         if menu==1:
             print("\nRegistrar:\n 1. Pieza\n 2. Maquina\n 3. Cliente\n 4. Pedido\n 5. Reposicion\n 6. Salir")
-            registrar=int(input("\nIngrese indice de elemento a registrar: "))
-            if registrar<1 or registrar>6:
-                raise FueraDeRango
+            while True:
+                try:
+                    registrar=int(input("\nIngrese indice de elemento a registrar: "))
+                    if registrar<1 or registrar>6:
+                        raise FueraDeRango
+                    break
+                except ValueError:
+                    print("\nError! Ingrese un valor valido\n")
+                except FueraDeRango:
+                    print("\nError! Ingrese un indice dentro del rango\n")
             if registrar==1:
                 abortar=False
                 desc_pieza=input("Brinda una descripcion de la pieza: ")
@@ -100,6 +107,7 @@ while menu!=3:
                                         print("\nError!Valor de indice fuera de rango\n")
                             if abortar:
                                 break
+                        break
                     except ValueError:
                         print("\nError!Elija un valor adecuado\n")
 
@@ -146,7 +154,7 @@ while menu!=3:
                             break
                         except ValueError:
                             print("\nError!Elija un valor adecuado\n")
-                    nuevo_req=(maquina0,nueva_pieza,cantidad_piezas)
+                    nuevo_req=sistema.registrar_requerimiento(maquina0,nueva_pieza,cantidad_piezas)
                     maquina0.agregar_requerimiento(nuevo_req)
                     
                     while True:
@@ -204,7 +212,7 @@ while menu!=3:
             elif registrar==6:
                         pass
         elif menu==2:
-            print("\nListar: \n 1. Clientes\n 2. Pedidos\n 3. Cliente\n 4. Pedido\n 5. Contabilidad\n 6. Salir")
+            print("\nListar: \n 1. Clientes\n 2. Pedidos\n 3. Maquinas\n 4. Piezas\n 5. Contabilidad\n 6. Salir")
             listar=int(input("\nIngrese indice de elemento a listar: "))
             if listar<1 or listar>6:
                 raise ValueError
@@ -221,11 +229,7 @@ while menu!=3:
                         except:
                             pass
             elif listar==3:
-                    while True:
-                        try:
-                            pass
-                        except:
-                            pass
+                    sistema.listar_maquinas()
             elif listar==4:
                     while True:
                         try:
