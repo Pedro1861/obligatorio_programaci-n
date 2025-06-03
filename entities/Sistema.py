@@ -216,23 +216,23 @@ class Sistema():
             if opcion_estado ==1:
                 for pedido in self.lista_pedidos_pendientes:
                     n+=1
-                    print("{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Estado: {pedido.estado}, Precio: {pedido.precio}")
+                    print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Estado: {pedido.estado}, Precio: {pedido.precio}")
             elif opcion_estado ==2:
                 for pedido in self.lista_pedidos:
                     if pedido.estado=="entregado":
                         n+=1
-                        print("{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")
+                        print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")
         if filtrar == 2:
             for pedido in self.lista_pedidos:
                 n+=1
-                print("{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")
+                print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")
 
 
     def listar_contabilidad(self):
         costo_total=0
         ingreso_total=0
         for pedido in self.lista_pedidos and pedido not in self.lista_pedidos_pendientes:
-            costo_total+=pedido.maquina.costo_produccion
+            costo_total+=pedido.maquina.costo_produccion()
             ingreso_total+=pedido.precio
             ganancia_total=ingreso_total-costo_total
         print(f"1. Costo total de producción: {costo_total} USD \n 2. Ingreso total de ventas: {ingreso_total} USD \n 3. Ganancia total: {ingreso_total-costo_total} \n 4. Impuesto a la ganancia: {ganancia_total*0.25} \n 5. Ganancia total tras impuestos: {ganancia_total*0.75}")
