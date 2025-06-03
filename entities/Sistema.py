@@ -1,11 +1,11 @@
 
-from pieza import Pieza
-from errores import FueraDeRango, YaExiste
-from requerimiento import Requerimiento
-from maquina import Maquina
-from cliente import ClienteParticular, Empresa
-from reposicion import Reposicion
-from pedido import Pedido
+from entities.pieza import Pieza
+from entities.errores import FueraDeRango, YaExiste
+from entities.requerimiento import Requerimiento
+from entities.maquina import Maquina
+from entities.cliente import ClienteParticular, Empresa
+from entities.reposicion import Reposicion
+from entities.pedido import Pedido
 import datetime
 ###REGISTROS###
 
@@ -33,8 +33,15 @@ class Sistema():
     @classmethod
     def listar_piezas(cls):
         print("Piezas: ")
-        for i in cls.lista_piezas:
-            print(f"\n Codigo: {i.codigo}\n Descripcion: {i.desc}\n Costo: {i.costo}\n Cantidad: {i.cantidad}\n Lote: {i.lote}\n")
+        faltante=0
+        for piece in cls.lista_piezas:
+            for pedido in cls.lista_pedidos_pendientes:
+                for requerimiento in pedido.maquina.requerimiento:
+                    if requerimiento.pieza==piece:
+                        faltante=requerimiento.cantidad-piece.cantidad
+                        if faltante<0:
+                            faltante=0
+            print(f"\n Codigo: {piece.codigo}\n Descripcion: {piece.desc}\n Costo: {piece.costo}\n Cantidad: {piece.cantidad}\n Lote: {piece.lote}\nCantidad faltante:{faltante}\nCantidad recomendada a reponer:{round(faltante/piece.lote)}")
 
     ####PIEZAS####
     
@@ -49,8 +56,7 @@ class Sistema():
         for i in cls.lista_maquinas:
             print(f"\nCodigo:{i.codigo}\nDescripcion:{i.desc}\nRequerimientos:")
             for j in i.requerimiento:
-                if i==j.maquina:
-                    print(f" \nCodigo Pieza:{j.pieza.codigo}\n Cantidad: {j.cantidad}\n")
+                print(f" \nCodigo Pieza:{j.pieza.codigo}\n Cantidad: {j.cantidad}\n")
             print(f"Costo: {i.costo_produccion()}")
         
     ####MAQUINAS####
@@ -145,14 +151,14 @@ class Sistema():
     lista_pedidos=[]
     lista_pedidos_pendientes=[]
     def registrar_pedido(self):
-        print("sleccione el cliente que desea registrar un pedido: ")
+        print("seleccione el cliente que desea registrar un pedido: ")
         for i in range(len(self.lista_clientes)):
             print(f"{i+1}. {self.lista_clientes[i].nombre}")
         seleccion_cliente = int(input("Ingrese el número del cliente: ")) - 1
 
-        print("sleccione la máquina que desea registrar un pedido: ")
+        print("seleccione la máquina que desea registrar un pedido: ")
         for i in range(len(self.lista_maquinas)):
-            print(f"{i+1}. {self.lista_maquinas[i].descripcion}")
+            print(f"{i+1}. {self.lista_maquinas[i].desc}")
         seleccion_maquina = int(input("Ingrese el número de maquina: ")) - 1
         num_estado=0
         for pieza_pedido in self.lista_maquinas[seleccion_maquina].requerimientos:
@@ -222,7 +228,7 @@ class Sistema():
                     if pedido.estado=="entregado":
                         n+=1
                         print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")
-        if filtrar == 2:
+        elif filtrar == 2:
             for pedido in self.lista_pedidos:
                 n+=1
                 print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")

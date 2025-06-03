@@ -14,8 +14,6 @@ while True:
     except FueraDeRango:
         print("\nError!Elija un indice de los mostrados en pantalla\n")
 while menu!=3:
-    copia_piezas=sistema.lista_piezas
-
     while menu!=3:
         if menu==1:
             print("\nRegistrar:\n 1. Pieza\n 2. Maquina\n 3. Cliente\n 4. Pedido\n 5. Reposicion\n 6. Salir")
@@ -77,6 +75,7 @@ while menu!=3:
 
                 sistema.registrar_pieza(desc_pieza,costo_pieza,cantidad_pieza,lote_pieza)
             elif registrar==2:
+                copia_piezas=sistema.lista_piezas.copy()
                 while True:
                     try:
                         descripcion_maquina=input("Ingrese la descripcion de la nueva maquina: ")
@@ -182,7 +181,8 @@ while menu!=3:
                     except:
                         pass
             elif registrar==5:
-                sistema.listar_piezas()
+                for i in sistema.lista_piezas:
+                    print(f"\n Codigo: {i.codigo}\n Descripcion: {i.desc}\n Costo: {i.costo}\n Cantidad: {i.cantidad}\n Lote: {i.lote}\n")  
                 while True:
                     try:
                         code=int(input("Ingrese el codigo de la Pieza que desea reponer: "))
