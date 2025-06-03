@@ -1,10 +1,12 @@
 
-from entities.pieza import Pieza
-from exceptions.errores import FueraDeRango, YaExiste
-from entities.requerimiento import Requerimiento
-from entities.maquina import Maquina
-from entities.cliente import ClienteParticular, Empresa
-from entities.reposicion import Reposicion
+from pieza import Pieza
+from errores import FueraDeRango, YaExiste
+from requerimiento import Requerimiento
+from maquina import Maquina
+from cliente import ClienteParticular, Empresa
+from reposicion import Reposicion
+from pedido import Pedido
+import datetime
 ###REGISTROS###
 
 
@@ -142,19 +144,19 @@ class Sistema():
     ####PEDIDOS####
     lista_pedidos=[]
     lista_pedidos_pendientes=[]
-    def registrar_pedido():
+    def registrar_pedido(self):
         print("sleccione el cliente que desea registrar un pedido: ")
-        for i in range(len(lista_clientes)):
-            print(f"{i+1}. {lista_clientes[i].nombre}")
+        for i in range(len(self.lista_clientes)):
+            print(f"{i+1}. {self.lista_clientes[i].nombre}")
         seleccion_cliente = int(input("Ingrese el número del cliente: ")) - 1
 
         print("sleccione la máquina que desea registrar un pedido: ")
-        for i in range(len(lista_maquinas)):
-            print(f"{i+1}. {lista_maquinas[i].descripcion}")
+        for i in range(len(self.lista_maquinas)):
+            print(f"{i+1}. {self.lista_maquinas[i].descripcion}")
         seleccion_maquina = int(input("Ingrese el número de maquina: ")) - 1
         num_estado=0
-        for pieza_pedido in lista_maquinas[seleccion_maquina].requerimientos:
-            for pieza in lista_piezas:
+        for pieza_pedido in self.lista_maquinas[seleccion_maquina].requerimientos:
+            for pieza in self.lista_piezas:
                 if pieza.codigo_pieza==pieza_pedido.codigo_pieza and pieza.cantidad<pieza_pedido.cantidad:
                     num_estado+=1
         if num_estado>0:
@@ -164,29 +166,29 @@ class Sistema():
             estado="entregado"
             fecha_entregado=datetime.now()
         
-        cliente_pedido=lista_clientes[seleccion_cliente]
-        if cliente_pedido in lista_particulares:
-            precio=(lista_maquinas[seleccion_maquina].costo)*1.50
-        elif cliente_pedido in lista_empresas:
-            precio=((lista_maquinas[seleccion_maquina].costo)*1.50)*0.80
+        cliente_pedido= self.lista_clientes[seleccion_cliente]
+        if cliente_pedido in self.lista_particulares:
+            precio=(self.lista_maquinas[seleccion_maquina].costo)*1.50
+        elif cliente_pedido in self.lista_empresas:
+            precio=((self.lista_maquinas[seleccion_maquina].costo)*1.50)*0.80
         fecha_recibido=datetime.now()
-        nuevo_pedido = Pedido(lista_clientes[seleccion_cliente], lista_maquinas[seleccion_maquina], fecha_recibido, fecha_entregado, estado, precio)
+        nuevo_pedido = Pedido(self.lista_clientes[seleccion_cliente], self.lista_maquinas[seleccion_maquina], fecha_recibido, fecha_entregado, estado, precio)
         if nuevo_pedido.estado=="pendiente":
-            lista_pedidos_pendientes.append(nuevo_pedido)
+            self.lista_pedidos_pendientes.append(nuevo_pedido)
             print("Pedido registrado. Estado: PENDIENTE")
         elif nuevo_pedido.estado=="entregado":
             for navegar_requerimientos in nuevo_pedido.maquina.requerimientos:
-                for navegar_pieza in lista_piezas: 
+                for navegar_pieza in self.lista_piezas: 
                     if navegar_requerimientos.codigo_pieza==navegar_pieza.codigo_pieza:
                         navegar_pieza.cantidad-=navegar_requerimientos.cantidad
-        lista_pedidos.append(nuevo_pedido)
+        self.lista_pedidos.append(nuevo_pedido)
         print(f"Pedido registrado con éxito: {nuevo_pedido}")
 
-    def completar_pedido():
-        for pedido_pendiente in lista_pedidos_pendientes:
+    def completar_pedido(self):
+        for pedido_pendiente in self.lista_pedidos_pendientes:
             num_estado=0
             for pieza_registrada in pedido_pendiente.maquina.requerimientos:
-                for pieza in lista_piezas:
+                for pieza in self.lista_piezas:
                     if pieza.codigo_pieza==pieza_registrada.pieza.codigo_pieza and pieza.cantidad<pieza_registrada.cantidad:
                         num_estado+=1
             if num_estado>0:
@@ -197,39 +199,39 @@ class Sistema():
                 pedido_pendiente.fecha_entregado=datetime.now()
                 pedido_pendiente.estado="entregado"
                 for navegar_requerimientos in pedido_pendiente.maquina.requerimientos:
-                    for navegar_pieza in lista_piezas: 
+                    for navegar_pieza in self.lista_piezas: 
                         if navegar_requerimientos.pieza==navegar_pieza:
                             navegar_pieza.cantidad-=navegar_requerimientos.cantidad
                 
             if pedido_pendiente.estado == "entregado":
-                lista_pedidos_pendientes.remove(pedido_pendiente)
+                self.lista_pedidos_pendientes.remove(pedido_pendiente)
                 print(f"Pedido {pedido_pendiente} completado y eliminado de la lista de pendientes.")
 
-    def listar_pedidos():
+    def listar_pedidos(self):
         print("LISTAR PEDIDOS \n ¿Desea filtrar por estado? \n 1. Si \n 2. No")
         filtrar = int(input("Ingrese su opción: "))
         if filtrar == 1:
             opcion_estado=int(input("Seleccione el estado del pedido: \n 1. Pendiente \n 2. Entregado"))
             n=0
             if opcion_estado ==1:
-                for pedido in lista_pedidos_pendientes:
+                for pedido in self.lista_pedidos_pendientes:
                     n+=1
                     print("{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Estado: {pedido.estado}, Precio: {pedido.precio}")
             elif opcion_estado ==2:
-                for pedido in lista_pedidos:
+                for pedido in self.lista_pedidos:
                     if pedido.estado=="entregado":
                         n+=1
                         print("{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")
         if filtrar == 2:
-            for pedido in lista_pedidos:
+            for pedido in self.lista_pedidos:
                 n+=1
                 print("{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")
 
 
-    def listar_contabilidad():
+    def listar_contabilidad(self):
         costo_total=0
         ingreso_total=0
-        for pedido in lista_pedidos and pedido not in lista_pedidos_pendientes:
+        for pedido in self.lista_pedidos and pedido not in self.lista_pedidos_pendientes:
             costo_total+=pedido.maquina.costo_produccion
             ingreso_total+=pedido.precio
             ganancia_total=ingreso_total-costo_total

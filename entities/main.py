@@ -1,5 +1,5 @@
-from exceptions.errores import FueraDeRango, NoExiste
-from entities.sistema import Sistema
+from errores import FueraDeRango, NoExiste
+from sistema import Sistema
 sistema=Sistema()  
 
 print("\n1. Registrar\n2. Listar\n3. Salir del sistema")
