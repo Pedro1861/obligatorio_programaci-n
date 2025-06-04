@@ -174,18 +174,51 @@ while menu!=3:
                             print("\nError! Indice fuera de rango")
                 print("\nMaquina registrada con exito!\n")
         
-            elif registrar==3:
-                while True:
-                    try:
-                        pass
-                    except:
-                        pass
+            elif registrar=
+                print("\nRegistrar cliente: ")
+                print("Tipo cliente: \n 1. Cliente Particular \n 2. Empresea")
+                tipo=int(input("Seleccione tipo de cliente: "))
+                if tipo==1:
+                    cédula= int(input("ingrese la cédula del cliente: "))
+                    for particular in sistema.lista_particulares:
+                        while particular.cédula == cédula:
+                            cédula=int(input("ERROR: la cédula ya está regitrada. \n Ingrese una nueva cédula: "))
+                    nombre=input("ingrese nombre completo del cliente: ")
+                    teléfono=int(input("ingrese el teléfono del cliente: "))
+                    correo_electrónico= input("ingrese el correo electrónico del cliente: ")
+                    sistema.registrar_cliente_Particular(cédula, nombre, teléfono, correo_electrónico)
+    
+                elif tipo==2:
+                    rut=int(input("Ingrese número de RUT: "))
+                    for empresa in sistema.lista_empresas:
+                        while empresa.rut == rut:
+                            rut=int(input("ERROR: el RUT ya está regitrado. \n Ingrese un nuevo número de RUT: "))                    
+                    nombre=input("Ingrese nombre: ")
+                    página_web=input("Ingrese página web: ")
+                    teléfono=input("Ingrese teléfono de contacto: ")
+                    correo_electrónico= input("ingrese el correo electrónico del cliente: ")
+                    sistema.registrar_cliente_Empresa(rut, nombre, página_web, teléfono, correo_electrónico)
+                    
             elif registrar==4:
-                while True:
-                    try:
-                        pass
-                    except:
-                        pass
+                cliente_pedido=None
+                maquina_pedido=None
+                print("sleccione el cliente que desea registrar un pedido: ")
+                for cliente in sistema.lista_clientes:
+                    print(f"ID: {cliente.ID_cliente} Nombre: {cliente.nombre}, ")
+                seleccion_cliente = int(input("Ingrese el ID del cliente: "))
+                for cliente in sistema.lista_clientes:
+                    if cliente.ID_cliente == seleccion_cliente:
+                        cliente_pedido = cliente
+                
+                print("sleccione la máquina que desea registrar un pedido: ")
+                for maquina in sistema.lista_maquinas:
+                    print(f"Código: {maquina.codigo}, descripción: {maquina.descripcion}")
+                seleccion_maquina = int(input("Ingrese el código de la maquina a registrar: "))
+                for maquina in sistema.lista_maquinas:
+                    if maquina.codigo == seleccion_maquina:
+                        maquina_pedido = maquina
+                sistema.registrar_pedido(cliente_pedido,maquina_pedido)
+                
             elif registrar==5:
                 for i in sistema.lista_piezas:
                     print(f"\n Codigo: {i.codigo}\n Descripcion: {i.desc}\n Costo: {i.costo}\n Cantidad: {i.cantidad}\n Lote: {i.lote}\n")  
