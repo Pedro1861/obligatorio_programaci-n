@@ -76,6 +76,9 @@ while menu!=3:
                 sistema.registrar_pieza(desc_pieza,costo_pieza,cantidad_pieza,lote_pieza)
             elif registrar==2:
                 copia_piezas=sistema.lista_piezas.copy()
+                if copia_piezas==[]:
+                            print("\nError! No existen piezas registradas, no se puede registrar maquinas\n")
+                            break
                 while True:
                     try:
                         descripcion_maquina=input("Ingrese la descripcion de la nueva maquina: ")
@@ -119,7 +122,6 @@ while menu!=3:
                 nuevo_requerimiento=1
                 while nuevo_requerimiento==1:
                     if copia_piezas==[]:
-                            print("\nError! No existen piezas registradas, no se puede registrar maquinas\n")
                             break
                     for i in copia_piezas:
                         print(f"\n Codigo: {i.codigo}\n Descripcion: {i.desc}\n Costo: {i.costo}\n Cantidad: {i.cantidad}\n Lote: {i.lote}\n")  
@@ -147,6 +149,7 @@ while menu!=3:
                             if i.codigo==code:
                                 nueva_pieza=i
                                 copia_piezas.remove(i)
+                
                     while True:
                         try:
                             cantidad_piezas=int(input("Ingrese la cantidad de piezas necesarias: "))
@@ -158,6 +161,8 @@ while menu!=3:
                     
                     while True:
                         try:
+                            if copia_piezas==[]:
+                                break
                             nuevo_requerimiento=int(input("Desea agregar un nuevo requerimiento?\n 1.SI\n 2.NO\n___:"))
                             if nuevo_requerimiento!=1 and nuevo_requerimiento!=2:
                                 raise FueraDeRango
@@ -167,6 +172,7 @@ while menu!=3:
                       
                         except FueraDeRango:
                             print("\nError! Indice fuera de rango")
+                print("\nMaquina registrada con exito!\n")
         
             elif registrar==3:
                 while True:
@@ -231,11 +237,7 @@ while menu!=3:
             elif listar==3:
                     sistema.listar_maquinas()
             elif listar==4:
-                    while True:
-                        try:
-                            pass
-                        except:
-                            pass
+                    sistema.listar_piezas()
             elif listar==5:
                     while True:
                         try:

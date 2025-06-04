@@ -32,17 +32,20 @@ class Sistema():
     
     @classmethod
     def listar_piezas(cls):
+        if cls.lista_piezas==[]:
+            print("\nError! No hay Piezas para listar\n")
         print("Piezas: ")
         faltante=0
         for piece in cls.lista_piezas:
             for pedido in cls.lista_pedidos_pendientes:
                 for requerimiento in pedido.maquina.requerimiento:
                     if requerimiento.pieza==piece:
-                        faltante=requerimiento.cantidad-piece.cantidad
+                        faltante+=requerimiento.cantidad-piece.cantidad
                         if faltante<0:
                             faltante=0
-            print(f"\n Codigo: {piece.codigo}\n Descripcion: {piece.desc}\n Costo: {piece.costo}\n Cantidad: {piece.cantidad}\n Lote: {piece.lote}\nCantidad faltante:{faltante}\nCantidad recomendada a reponer:{round(faltante/piece.lote)}")
-
+            print(f"\n Codigo: {piece.codigo}\n Descripcion: {piece.desc}\n Costo: {piece.costo}\n Cantidad: {piece.cantidad}\n Lote: {piece.lote}")
+            if faltante!=0:
+                print(f"Cantidad faltante:{faltante}\nLotes recomendados reponer:{round(faltante/piece.lote)}")
     ####PIEZAS####
     
     ####MAQUINAS###
@@ -50,14 +53,18 @@ class Sistema():
         maquina0=Maquina(descripcion)
         self.lista_maquinas.append(maquina0)
         return maquina0
-    @classmethod
-    def listar_maquinas(cls):
+    
+    def listar_maquinas(self):
+        if self.lista_maquinas==[]:
+            print("\nError! No hay Maquinas para listar\n")
+            pass
         print("Maquinas: \n")
-        for i in cls.lista_maquinas:
-            print(f"\nCodigo:{i.codigo}\nDescripcion:{i.desc}\nRequerimientos:")
+        for i in self.lista_maquinas:
+            print(f"\nCodigo:{i.codigo}\n\nDescripcion:{i.desc}\n\nRequerimientos:")
             for j in i.requerimiento:
-                print(f" \nCodigo Pieza:{j.pieza.codigo}\n Cantidad: {j.cantidad}\n")
-            print(f"Costo: {i.costo_produccion()}")
+                print(f" Codigo Pieza:{j.pieza.codigo}\n Cantidad Pieza: {j.cantidad}\n")
+            print(f"Costo: {i.costo_produccion()}\n")
+            print("---------------------------")
         
     ####MAQUINAS####
                 
@@ -237,9 +244,10 @@ class Sistema():
     def listar_contabilidad(self):
         costo_total=0
         ingreso_total=0
-        for pedido in self.lista_pedidos and pedido not in self.lista_pedidos_pendientes:
-            costo_total+=pedido.maquina.costo_produccion()
-            ingreso_total+=pedido.precio
-            ganancia_total=ingreso_total-costo_total
+        for pedido in self.lista_pedidos:
+            if pedido not in self.lista_pedidos_pendientes:
+                costo_total+=pedido.maquina.costo_produccion()
+                ingreso_total+=pedido.precio
+                ganancia_total=ingreso_total-costo_total
         print(f"1. Costo total de producción: {costo_total} USD \n 2. Ingreso total de ventas: {ingreso_total} USD \n 3. Ganancia total: {ingreso_total-costo_total} \n 4. Impuesto a la ganancia: {ganancia_total*0.25} \n 5. Ganancia total tras impuestos: {ganancia_total*0.75}")
 
