@@ -1,5 +1,5 @@
 
-from entities.pieza import Pieza
+from pieza import Pieza
 from entities.errores import FueraDeRango, YaExiste
 from entities.requerimiento import Requerimiento
 from entities.maquina import Maquina
@@ -27,9 +27,9 @@ class Sistema():
     
     ####PIEZA####
     
-    def registrar_pieza(self,desc_pieza,costo_pieza,cantidad_pieza,lote_pieza):
+    def registrar_pieza(self,codigo,desc_pieza,costo_pieza,cantidad_pieza,lote_pieza):
 
-        pieza0=Pieza(desc_pieza,costo_pieza,cantidad_pieza,lote_pieza)
+        pieza0=Pieza(codigo,desc_pieza,costo_pieza,cantidad_pieza,lote_pieza)
         self.lista_piezas.append(pieza0)
     
     @classmethod
@@ -97,11 +97,8 @@ class Sistema():
     ####CLIENTE####
 
     ####REPOSICION####
-    def registrar_reposicion(self,pieza,cantidad_lotes):
-        reposicion0=Reposicion(pieza,cantidad_lotes)
-        pieza.reposicion.append(reposicion0)
-        pieza.cantidad+=cantidad_lotes*pieza.lote
-        print(f"Costo de reposicion: {reposicion0.get_costo()}\nCantidad disponible de Pieza({reposicion0.pieza}): {pieza.cantidad }")
+    def registrar_reposicion():
+        pass
     ####REPOSICION####
     def registrar_requerimiento(self,maquina,pieza,cantidad):
         requerimiento=Requerimiento(maquina,pieza,cantidad)
