@@ -1,5 +1,5 @@
 
-from pieza import Pieza
+from entities.pieza import Pieza
 from entities.errores import FueraDeRango, YaExiste
 from entities.requerimiento import Requerimiento
 from entities.maquina import Maquina
@@ -107,7 +107,7 @@ class Sistema():
     ####PEDIDOS####
     def registrar_pedido(self,cliente_pedido,maquina_pedido):
         num_estado=0
-        for pieza_pedido in maquina_pedido.requerimientos:
+        for pieza_pedido in maquina_pedido.requerimiento:
             for pieza in self.lista_piezas:
                 if pieza.codigo_pieza==pieza_pedido.codigo_pieza and pieza.cantidad<pieza_pedido.cantidad:
                     num_estado+=1
@@ -132,7 +132,7 @@ class Sistema():
                     if navegar_requerimientos.codigo_pieza==navegar_pieza.codigo_pieza:
                         navegar_pieza.cantidad-=navegar_requerimientos.cantidad
         self.lista_pedidos.append(nuevo_pedido)
-        print(f"Pedido registrado con éxito: {nuevo_pedido}")
+        print(f"Pedido registrado con éxito!")
 
     def completar_pedido(self):
         for pedido_pendiente in self.lista_pedidos_pendientes:
@@ -160,16 +160,16 @@ class Sistema():
         n=0
         for pedido in self.lista_pedidos:
                 n+=1
-                print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")
+                print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.desc}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")
     def listar_pedidos_filtrados(self, opcion_estado):
         n=0
         if opcion_estado ==1:
             for pedido in self.lista_pedidos_pendientes:
                 n+=1
-                print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Estado: {pedido.estado}, Precio: {pedido.precio}")
+                print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.desc}, Fecha Recibido: {pedido.fecha_recibido}, Estado: {pedido.estado}, Precio: {pedido.precio}")
         elif opcion_estado ==2:
             n=0
             for pedido in self.lista_pedidos:
                 if pedido.estado=="entregado":
                     n+=1
-                    print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.descripcion}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")
+                    print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.desc}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.precio}")

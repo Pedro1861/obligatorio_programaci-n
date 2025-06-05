@@ -1,5 +1,5 @@
 from entities.errores import FueraDeRango, NoExiste, YaExiste
-from entities.sistema import Sistema
+from entities.Sistema import Sistema
 sistema=Sistema()  
 
 print("\n1. Registrar\n2. Listar\n3. Salir del sistema")
@@ -58,9 +58,11 @@ while menu!=3:
                         break
                     except ValueError:
                         print("\nError!Elija un valor adecuado\n")
+                
                         
 
                 sistema.registrar_pieza(desc_pieza,costo_pieza,cantidad_pieza,lote_pieza)
+                print("\nPieza registrada con exito!\n")
             elif registrar==2:
                 copia_piezas=sistema.lista_piezas.copy()
                 if copia_piezas==[]:
@@ -211,12 +213,23 @@ while menu!=3:
                             print("ERROR: el RUT ya está regitrado, ingrese uno nuevo")                  
                     nombre=input("Ingrese nombre: ")
                     página_web=input("Ingrese página web: ")
-                    teléfono=input("Ingrese teléfono de contacto: ")
+                    while True:
+                        try:
+                            teléfono=int(input("Ingrese teléfono de contacto: "))
+                            break
+                        except ValueError:
+                            print("\nError! Ingrese un valor valido\n")
                     correo_electrónico= input("ingrese el correo electrónico del cliente: ")
                     sistema.registrar_cliente_Empresa(rut, nombre, teléfono, correo_electrónico, página_web)
                     print("\nCliente Empresa registrado con exito!\n")
                     
             elif registrar==4:
+                if sistema.lista_clientes==[]:
+                    print("\nError! No existen clientes para poder registrar pedidos\n")
+                    break
+                elif sistema.lista_maquinas==[]:
+                    print("\nError! No existen maquinas para poder registrar pedidos\n")
+                    break
                 cliente_pedido=None
                 maquina_pedido=None
                 print("seleccione el cliente que desea registrar un pedido: ")
@@ -232,7 +245,7 @@ while menu!=3:
                     if cliente.id == seleccion_cliente:
                         cliente_pedido = cliente
                 
-                print("sleccione la máquina que desea registrar un pedido: ")
+                print("seleccione la máquina que desea registrar un pedido: ")
                 for maquina in sistema.lista_maquinas:
                     print(f"Código: {maquina.codigo}, descripción: {maquina.descripcion}")
                 while True:
@@ -248,6 +261,9 @@ while menu!=3:
                 print("\nPedido registrado con exito!\n")
                 
             elif registrar==5:
+                if sistema.lista_piezas==[]:
+                    print("\nError! No existen piezas para reabastecer\n")
+                    break
                 for i in sistema.lista_piezas:
                     print(f"\n Codigo: {i.codigo}\n Descripcion: {i.desc}\n Costo: {i.costo}\n Cantidad: {i.cantidad}\n Lote: {i.lote}\n")  
                 while True:
@@ -293,9 +309,15 @@ while menu!=3:
                     print("\nError! Elija un valor adecuado\n")
             
             if listar==1:
+                if sistema.lista_clientes==[]:
+                    print("\nError! No existen clientes para listar\n")
+                    break
                 sistema.listar_clientes()
 
             elif listar==2:
+                    if sistema.lista_pedidos==[]:
+                        print("\nError! No existen pedidos para listar\n")
+                        break
                     print("Desea filtrar los pedidos segun su estado de entrega?\n\n1.SI\n2.NO")
 
                     while True:
