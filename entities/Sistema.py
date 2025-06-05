@@ -21,6 +21,8 @@ class Sistema():
     lista_requerimientos=[]
     lista_empresas=[]
     lista_particulares=[]
+    lista_pedidos=[]
+    lista_pedidos_pendientes=[]
 
     
     ####PIEZA####
@@ -74,23 +76,15 @@ class Sistema():
 
     ####CLIENTE####
     def registrar_cliente_Particular(self,cédula,nombre,teléfono,correo_electrónico):
-        ID_cliente=self.ID_cliente
-        for cliente in self.lista_clientes:
-            while cliente.ID_cliente == ID_cliente:
-                ID_cliente+=1
-        cliente=ClienteParticular(ID_cliente,cédula,nombre,teléfono,correo_electrónico)
+        cliente=ClienteParticular(cédula,nombre,teléfono,correo_electrónico)
         self.lista_clientes.append(cliente)
         self.lista_particulares.append(cliente)
-        self.ID_cliente += 1
-    def registrar_cliente_Empresa(self,rut,nombre,página_web,teléfono,correo_electrónico):
-        ID_cliente=self.ID_cliente
-        for cliente in self.lista_clientes:
-            while cliente.ID_cliente == ID_cliente:
-                ID_cliente+=1
-        cliente=Empresa(ID_cliente,rut,nombre,página_web,teléfono,correo_electrónico)
+
+    def registrar_cliente_Empresa(self,rut,nombre,pagina_web,teléfono,correo_electrónico):
+        cliente=Empresa(rut,nombre,teléfono,correo_electrónico,pagina_web)
         self.lista_clientes.append(cliente)
         self.lista_empresas.append(cliente)
-        self.ID_cliente += 1
+
     def listar_clientes(self):
         n=0
         for cliente in self.lista_clientes:
@@ -115,33 +109,33 @@ class Sistema():
     
     ####PEDIDOS####
     def registrar_pedido(self,cliente_pedido,maquina_pedido):
-    num_estado=0
-    for pieza_pedido in maquina_pedido.requerimientos:
-        for pieza in self.lista_piezas:
-            if pieza.codigo_pieza==pieza_pedido.codigo_pieza and pieza.cantidad<pieza_pedido.cantidad:
-                num_estado+=1
-    if num_estado>0:
-        estado="pendiente"
-        fecha_entregado=None
-    else:
-        estado="entregado"
-        fecha_entregado=datetime.now()
-    if cliente_pedido in self.lista_particulares:
-        precio=(maquina_pedido.costo)*1.50
-    elif cliente_pedido in self.lista_empresas:
-        precio=((maquina_pedido.costo)*1.50)*0.80
-    fecha_recibido=datetime.now()
-    nuevo_pedido = Pedido(cliente_pedido, maquina_pedido, fecha_recibido, fecha_entregado, estado, precio)
-    if nuevo_pedido.estado=="pendiente":
-        self.lista_pedidos_pendientes.append(nuevo_pedido)
-        print("Pedido registrado. Estado: PENDIENTE")
-    elif nuevo_pedido.estado=="entregado":
-        for navegar_requerimientos in nuevo_pedido.maquina.requerimientos:
-            for navegar_pieza in self.lista_piezas:
-                if navegar_requerimientos.codigo_pieza==navegar_pieza.codigo_pieza:
-                    navegar_pieza.cantidad-=navegar_requerimientos.cantidad
-    self.lista_pedidos.append(nuevo_pedido)
-    print(f"Pedido registrado con éxito: {nuevo_pedido}")
+        num_estado=0
+        for pieza_pedido in maquina_pedido.requerimientos:
+            for pieza in self.lista_piezas:
+                if pieza.codigo_pieza==pieza_pedido.codigo_pieza and pieza.cantidad<pieza_pedido.cantidad:
+                    num_estado+=1
+        if num_estado>0:
+            estado="pendiente"
+            fecha_entregado=None
+        else:
+            estado="entregado"
+            fecha_entregado=datetime.now()
+        if cliente_pedido in self.lista_particulares:
+            precio=(maquina_pedido.costo)*1.50
+        elif cliente_pedido in self.lista_empresas:
+            precio=((maquina_pedido.costo)*1.50)*0.80
+        fecha_recibido=datetime.now()
+        nuevo_pedido = Pedido(cliente_pedido, maquina_pedido, fecha_recibido, fecha_entregado, estado, precio)
+        if nuevo_pedido.estado=="pendiente":
+            self.lista_pedidos_pendientes.append(nuevo_pedido)
+            print("Pedido registrado. Estado: PENDIENTE")
+        elif nuevo_pedido.estado=="entregado":
+            for navegar_requerimientos in nuevo_pedido.maquina.requerimientos:
+                for navegar_pieza in self.lista_piezas:
+                    if navegar_requerimientos.codigo_pieza==navegar_pieza.codigo_pieza:
+                        navegar_pieza.cantidad-=navegar_requerimientos.cantidad
+        self.lista_pedidos.append(nuevo_pedido)
+        print(f"Pedido registrado con éxito: {nuevo_pedido}")
 
     def completar_pedido(self):
         for pedido_pendiente in self.lista_pedidos_pendientes:

@@ -1,4 +1,4 @@
-from entities.errores import FueraDeRango, NoExiste
+from entities.errores import FueraDeRango, NoExiste, YaExiste
 from entities.sistema import Sistema
 sistema=Sistema()  
 
@@ -28,29 +28,16 @@ while menu!=3:
                 except FueraDeRango:
                     print("\nError! Ingrese un indice dentro del rango\n")
             if registrar==1:
-                abortar=False
-                desc_pieza=input("Brinda una descripcion de la pieza: ")
-                for i in sistema.lista_piezas:
-                    if i.desc==desc_pieza:
-                        nueva_desc=int(input("ERROR:La pieza ya existe.\n Si desea poner otra descripcion, ingrese 1\n Si desea abortar la operacion ingrese 2\n__:"))
-                        if nueva_desc!=1 and nueva_desc!=2:
-                            raise FueraDeRango
-
-                        elif nueva_desc==1:
-                            verificado=1
-                            while verificado==1:
-                                desc_pieza=input("Ingrese una descripcion valida: ")
-                                for j in sistema.lista_piezas:
-                                    if desc_pieza==j.desc:
-                                        print("\nEEROR!La descripcion de la pieza sigue siendo igual\n")
-                                    else:
-                                        verificado=2
-
-                        elif nueva_desc==2:
-                            abortar=True
-                            break
-                if abortar: 
-                    continue
+                while True:
+                    try:
+                        desc_pieza=input("Brinda una descripcion de la pieza: ")
+                        for i in sistema.lista_piezas:
+                            if i.desc==desc_pieza:
+                                raise YaExiste
+                        nueva_desc=1
+                        break
+                    except YaExiste:
+                        print("\nError! Esa pieza ya existe. Elija una nueva descripcion\n")
                 while True:
                     try:
                         costo_pieza=int(input("Brinda costo por unidad de la pieza: "))
@@ -174,50 +161,91 @@ while menu!=3:
                             print("\nError! Indice fuera de rango")
                 print("\nMaquina registrada con exito!\n")
         
-            elif registrar=
+            elif registrar==3:
                 print("\nRegistrar cliente: ")
                 print("Tipo cliente: \n 1. Cliente Particular \n 2. Empresea")
-                tipo=int(input("Seleccione tipo de cliente: "))
+                while True:
+                    try:
+                        tipo=int(input("Seleccione tipo de cliente: "))
+                        if tipo!=1 and tipo!=2:
+                            raise FueraDeRango
+                        break
+                    except ValueError:
+                        print("\nError! Ingrese un valor valido\n")
+                    except FueraDeRango:
+                        print("\nError! Indice fuera de rango\n")
                 if tipo==1:
-                    cédula= int(input("ingrese la cédula del cliente: "))
-                    for particular in sistema.lista_particulares:
-                        while particular.cédula == cédula:
-                            cédula=int(input("ERROR: la cédula ya está regitrada. \n Ingrese una nueva cédula: "))
+                    while True:
+                        try:
+                            cédula= int(input("ingrese la cédula del cliente: "))
+                            for particular in sistema.lista_particulares:
+                                if particular.cédula==cédula:
+                                    raise YaExiste
+                            break
+                        except YaExiste:
+                            print("ERROR: la cédula ya está regitrada. Ingrese una nueva")
+                        except ValueError:
+                             print("\nError! Ingrese un valor valido\n")
                     nombre=input("ingrese nombre completo del cliente: ")
-                    teléfono=int(input("ingrese el teléfono del cliente: "))
+                    while True:
+                        try:
+                            teléfono=int(input("ingrese el teléfono del cliente: "))
+                            break
+                        except ValueError:
+                             print("\nError! Ingrese un valor valido\n")
                     correo_electrónico= input("ingrese el correo electrónico del cliente: ")
                     sistema.registrar_cliente_Particular(cédula, nombre, teléfono, correo_electrónico)
+                    print("\nCliente Particular registrado con exito!\n")
     
                 elif tipo==2:
-                    rut=int(input("Ingrese número de RUT: "))
-                    for empresa in sistema.lista_empresas:
-                        while empresa.rut == rut:
-                            rut=int(input("ERROR: el RUT ya está regitrado. \n Ingrese un nuevo número de RUT: "))                    
+                    while True:
+                        try:
+                            rut=int(input("Ingrese número de RUT: "))
+                            for empresa in sistema.lista_empresas:
+                                if empresa.rut==rut:
+                                    raise YaExiste
+                            break
+                        except ValueError:
+                            print("\nError! Elija un valor adecuado\n")
+                        except YaExiste:
+                            print("ERROR: el RUT ya está regitrado, ingrese uno nuevo")                  
                     nombre=input("Ingrese nombre: ")
                     página_web=input("Ingrese página web: ")
                     teléfono=input("Ingrese teléfono de contacto: ")
                     correo_electrónico= input("ingrese el correo electrónico del cliente: ")
-                    sistema.registrar_cliente_Empresa(rut, nombre, página_web, teléfono, correo_electrónico)
+                    sistema.registrar_cliente_Empresa(rut, nombre, teléfono, correo_electrónico, página_web)
+                    print("\nCliente Empresa registrado con exito!\n")
                     
             elif registrar==4:
                 cliente_pedido=None
                 maquina_pedido=None
-                print("sleccione el cliente que desea registrar un pedido: ")
+                print("seleccione el cliente que desea registrar un pedido: ")
                 for cliente in sistema.lista_clientes:
-                    print(f"ID: {cliente.ID_cliente} Nombre: {cliente.nombre}, ")
-                seleccion_cliente = int(input("Ingrese el ID del cliente: "))
+                    print(f"ID: {cliente.id} Nombre: {cliente.nombre}, ")
+                while True:
+                    try:
+                        seleccion_cliente = int(input("Ingrese el ID del cliente: "))
+                        break
+                    except ValueError:
+                        print("\nError! Elija un valor adecuado\n")
                 for cliente in sistema.lista_clientes:
-                    if cliente.ID_cliente == seleccion_cliente:
+                    if cliente.id == seleccion_cliente:
                         cliente_pedido = cliente
                 
                 print("sleccione la máquina que desea registrar un pedido: ")
                 for maquina in sistema.lista_maquinas:
                     print(f"Código: {maquina.codigo}, descripción: {maquina.descripcion}")
-                seleccion_maquina = int(input("Ingrese el código de la maquina a registrar: "))
+                while True:
+                    try:
+                        seleccion_maquina = int(input("Ingrese el código de la maquina a registrar: "))
+                        break
+                    except ValueError:
+                        print("\nError! Elija un valor adecuado\n")
                 for maquina in sistema.lista_maquinas:
                     if maquina.codigo == seleccion_maquina:
                         maquina_pedido = maquina
                 sistema.registrar_pedido(cliente_pedido,maquina_pedido)
+                print("\nPedido registrado con exito!\n")
                 
             elif registrar==5:
                 for i in sistema.lista_piezas:
@@ -238,6 +266,7 @@ while menu!=3:
                         print("\nError! Elija un valor adecuado\n")
                     except NoExiste:
                         print("\nError! Ese codigo de pieza no existe\n")
+                
                         
 
                 while True:
@@ -246,27 +275,55 @@ while menu!=3:
                         break
                     except ValueError:
                         print("\nError! Elija un valor adecuado\n")
-                        pass
                 sistema.registrar_reposicion(pieza_repuesta,cantidad_lotes)
+                print("\nReposicion realizada con exito!\n")
             elif registrar==6:
                         pass
         elif menu==2:
             print("\nListar: \n 1. Clientes\n 2. Pedidos\n 3. Maquinas\n 4. Piezas\n 5. Contabilidad\n 6. Salir")
-            listar=int(input("\nIngrese indice de elemento a listar: "))
-            if listar<1 or listar>6:
-                raise ValueError
-            elif listar==1:
-                    while True:
-                        try:
-                            pass
-                        except:
-                            pass
+            while True:
+                try:
+                    listar=int(input("\nIngrese indice de elemento a listar: "))
+                    if listar<1 or listar>6:
+                        raise FueraDeRango
+                    break
+                except FueraDeRango:
+                    print("\nError! Elija un indice dentro del rango\n")
+                except ValueError:
+                    print("\nError! Elija un valor adecuado\n")
+            
+            if listar==1:
+                sistema.listar_clientes()
+
             elif listar==2:
+                    print("Desea filtrar los pedidos segun su estado de entrega?\n\n1.SI\n2.NO")
+
                     while True:
                         try:
-                            pass
-                        except:
-                            pass
+                            filtrado=int(input("Ingrese su eleccion: "))
+                            if filtrado!=1 and filtrado!=2:
+                                raise FueraDeRango
+                            break       
+                        except FueraDeRango:
+                            print("\nError! Elija un indice dentro del rango\n")
+                        except ValueError: 
+                            print("\nError! Elija un valor valido\n")
+                    if filtrado==1:
+                        print("Elija que Pedidos desea ver:\n\n 1.Pendientes\n 2.Entregados\n")
+                        while True:
+                            try:
+                                tipo_pedido=int(input("Ingrese su eleccion: "))
+                                if tipo_pedido!=1 and tipo_pedido!=2:
+                                    raise FueraDeRango
+                                break
+                            except FueraDeRango:
+                                print("\nError! Elija un indice dentro del rango\n")
+                            except ValueError:
+                                print("\nError! Elija un valor valido\n")
+                        sistema.listar_pedidos_filtrados(tipo_pedido)
+                    elif filtrado==2:
+                        sistema.listar_pedidos()
+                    
             elif listar==3:
                     sistema.listar_maquinas()
             elif listar==4:
