@@ -166,62 +166,75 @@ while menu!=3:
             elif registrar==3:
                 print("\nRegistrar cliente: ")
                 print("Tipo cliente: \n 1. Cliente Particular \n 2. Empresea")
-                while True:
+                while True: 
                     try:
                         tipo=int(input("Seleccione tipo de cliente: "))
-                        if tipo!=1 and tipo!=2:
-                            raise FueraDeRango
-                        break
                     except ValueError:
-                        print("\nError! Ingrese un valor valido\n")
-                    except FueraDeRango:
-                        print("\nError! Indice fuera de rango\n")
+                        print("ERROR: Ingrese un número válido (1 o 2).")
+                    while tipo!=1 and tipo!=2:
+                        print("ERROR: Ingrese un número válido (1 o 2).")
+                        continue
+                    break
+            
                 if tipo==1:
-                    while True:
-                        try:
-                            cédula= int(input("ingrese la cédula del cliente: "))
-                            for particular in sistema.lista_particulares:
-                                if particular.cédula==cédula:
-                                    raise YaExiste
-                            break
-                        except YaExiste:
-                            print("ERROR: la cédula ya está regitrada. Ingrese una nueva")
-                        except ValueError:
-                             print("\nError! Ingrese un valor valido\n")
                     nombre=input("ingrese nombre completo del cliente: ")
                     while True:
                         try:
-                            teléfono=int(input("ingrese el teléfono del cliente: "))
-                            break
+                            cédula= int(input("ingrese la cédula del cliente: "))
                         except ValueError:
-                             print("\nError! Ingrese un valor valido\n")
+                            continue
+                        if len(str(cédula)) != 8:
+                            print("ERROR: La cédula debe tener 8 dígitos.")
+                            continue
+                        cédula_validación=0
+                        for particular in sistema.lista_particulares:
+                            if particular.cédula == cédula:
+                                cédula_validación+=1
+                        if cédula_validación>0:
+                            print("ERROR: La cédula ya está regitrada. \n Ingrese una nueva cédula: ")   
+                            continue
+                        break            
+                    while True:
+                        try:
+                            teléfono=int(input("ingrese el teléfono del cliente: "))
+                        except ValueError:
+                            print("ERROR: Ingrese un número válido para el teléfono.")
+                            continue
+                        break
                     correo_electrónico= input("ingrese el correo electrónico del cliente: ")
                     sistema.registrar_cliente_Particular(cédula, nombre, teléfono, correo_electrónico)
-                    print("\nCliente Particular registrado con exito!\n")
     
-                elif tipo==2:
-                    while True:
-                        try:
-                            rut=int(input("Ingrese número de RUT: "))
+                    elif tipo==2:
+                        nombre=input("Ingrese nombre del cliente: ")
+                        while True:
+                            try:
+                                rut=int(input("Ingrese número de RUT: "))
+                            except ValueError:
+                                print("ERROR: Ingrese un número válido para el RUT.")
+                                continue
+                            if len(str(rut)) !=11:
+                                print("ERROR: El RUT debe tener 11 dígitos.")
+                                continue
+                            rut_validación=0
                             for empresa in sistema.lista_empresas:
-                                if empresa.rut==rut:
-                                    raise YaExiste
+                                if empresa.rut == rut:
+                                    rut_validación+=1
+                            if rut_validación>0:
+                                print("ERROR: el RUT ya está regitrado. \n Ingrese un nuevo número de RUT: ")   
+                                continue
+                            break                 
+                        nombre=input("Ingrese nombre: ")
+                        página_web=input("Ingrese página web: ")
+                        while True:
+                            try: 
+                                teléfono=input("Ingrese teléfono de contacto: ")
+                            except ValueError:
+                                print("ERROR: Ingrese un número válido para el teléfono.")
+                                continue
                             break
-                        except ValueError:
-                            print("\nError! Elija un valor adecuado\n")
-                        except YaExiste:
-                            print("ERROR: el RUT ya está regitrado, ingrese uno nuevo")                  
-                    nombre=input("Ingrese nombre: ")
-                    página_web=input("Ingrese página web: ")
-                    while True:
-                        try:
-                            teléfono=int(input("Ingrese teléfono de contacto: "))
-                            break
-                        except ValueError:
-                            print("\nError! Ingrese un valor valido\n")
-                    correo_electrónico= input("ingrese el correo electrónico del cliente: ")
-                    sistema.registrar_cliente_Empresa(rut, nombre, teléfono, correo_electrónico, página_web)
-                    print("\nCliente Empresa registrado con exito!\n")
+                        correo_electrónico= input("ingrese el correo electrónico del cliente: ")
+                        sistema.registrar_cliente_Empresa(rut, nombre, página_web, teléfono, correo_electrónico)
+        
                     
             elif registrar==4:
                 if sistema.lista_clientes==[]:
@@ -232,34 +245,49 @@ while menu!=3:
                     break
                 cliente_pedido=None
                 maquina_pedido=None
-                print("seleccione el cliente que desea registrar un pedido: ")
+                print("sleccione el cliente que desea registrar un pedido: ")
                 for cliente in sistema.lista_clientes:
-                    print(f"ID: {cliente.id} Nombre: {cliente.nombre}, ")
+                    print(f"ID: {cliente.ID_cliente} Nombre: {cliente.nombre}, ")
                 while True:
                     try:
                         seleccion_cliente = int(input("Ingrese el ID del cliente: "))
-                        break
                     except ValueError:
-                        print("\nError! Elija un valor adecuado\n")
+                        print("ERROR: Ingrese un número válido para el ID del cliente.")
+                        continue
+                    encontrar_codigo_cliente=0
+                    for cliente in sistema.lista_clientes:
+                        if seleccion_cliente == cliente.ID_cliente:
+                            encontrar_codigo_cliente+=1
+                    if encontrar_codigo_cliente==0:
+                        print("ERROR: El ID del cliente no existe. Por favor, ingrese un ID válido.")
+                        continue
+                    break
                 for cliente in sistema.lista_clientes:
-                    if cliente.id == seleccion_cliente:
+                    if cliente.ID_cliente == seleccion_cliente:
                         cliente_pedido = cliente
                 
-                print("seleccione la máquina que desea registrar un pedido: ")
+                print("sleccione la máquina que desea registrar un pedido: ")
                 for maquina in sistema.lista_maquinas:
                     print(f"Código: {maquina.codigo}, descripción: {maquina.descripcion}")
                 while True:
                     try:
                         seleccion_maquina = int(input("Ingrese el código de la maquina a registrar: "))
-                        break
                     except ValueError:
-                        print("\nError! Elija un valor adecuado\n")
+                        print("ERROR: Ingrese un número válido para el código de la máquina.")
+                        continue
+                    encontrar_codigo_maq=0
+                    for maquina in sistema.lista_maquinas:
+                        if seleccion_maquina == maquina.codigo:
+                            encontrar_codigo_maq+=1
+                    if encontrar_codigo_maq==0:
+                        print("ERROR: El código de la máquina no existe. Por favor, ingrese un código válido.")
+                        continue
+                    break
                 for maquina in sistema.lista_maquinas:
                     if maquina.codigo == seleccion_maquina:
                         maquina_pedido = maquina
                 sistema.registrar_pedido(cliente_pedido,maquina_pedido)
-                print("\nPedido registrado con exito!\n")
-                
+                    
             elif registrar==5:
                 if sistema.lista_piezas==[]:
                     print("\nError! No existen piezas para reabastecer\n")
@@ -293,6 +321,7 @@ while menu!=3:
                         print("\nError! Elija un valor adecuado\n")
                 sistema.registrar_reposicion(pieza_repuesta,cantidad_lotes)
                 print("\nReposicion realizada con exito!\n")
+                sistema.completar_pedido()
             elif registrar==6:
                         pass
         elif menu==2:
