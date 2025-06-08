@@ -1,7 +1,7 @@
 from entities.fueraderango import FueraDeRango
 from entities.noexiste import NoExiste
 from entities.yaexiste import YaExiste
-from entities.Sistema import Sistema
+from entities.sistema import Sistema
 
 sistema=Sistema()  
 
@@ -290,16 +290,21 @@ while menu!=3:
                        
                     while True:
                         try:
-                            teléfono=int(input("ingrese el teléfono del cliente: "))
-                            if teléfono<0:
-                                raise FueraDeRango
-                            break
-                        except ValueError:
-                            print("ERROR: Ingrese un número válido para el teléfono.")
-                        except FueraDeRango:
-                            print("\nError! El teléfono no puede ser negativo\n")
-                        except :
-                            print("\nERROR INESPERADO: ingrese un nuevo valor\n")
+                            teléfono = input("Ingrese el teléfono celular del cliente: ")
+                            
+                            if not teléfono.isdigit():
+                                raise ValueError("Debe ingresar solo números.")
+                            if not teléfono.startswith("09"):
+                                raise ValueError("El número debe comenzar con 09.")
+                            if len(teléfono) != 9:
+                                raise ValueError("El número debe tener exactamente 9 dígitos.")
+                            
+                            break  
+
+                        except ValueError as e:
+                            print(f"ERROR: {e}")
+                        except Exception as e:
+                            print(f"\nERROR INESPERADO: {e}\n")
                     while True:
                         try:
                             nombre=input("ingrese nombre completo del cliente: ")
@@ -317,13 +322,17 @@ while menu!=3:
                             correo_electrónico= input("ingrese el correo electrónico del cliente: ")
                             if correo_electrónico=="":
                                 raise ValueError
+                            if "@" not in correo_electrónico:
+                                raise ValueError
                             break
                         except ValueError:
                             print("ERROR: Ingrese un correo electrónico válido.")
                         except :
                             print("\nERROR INESPERADO: ingrese un nuevo valor\n")
+                    print("Cliente registrado con éxito!")
 
                     sistema.registrar_cliente_Particular(cédula, nombre, teléfono, correo_electrónico)
+                    
 
                 elif tipo==2:
                     abortar=False
@@ -412,8 +421,10 @@ while menu!=3:
                             print("ERROR: Ingrese un correo válido.")
                         except :
                             print("ERROR INESPERADO: ingrese un nuevo valor")
+                    print("El cliente fue registrado con éxito!")
 
                     sistema.registrar_cliente_Empresa(rut, nombre, página_web, teléfono, correo_electrónico)
+                    
         
                     
             elif registrar==4:
