@@ -24,6 +24,9 @@ class Pedido:
     @property
     def fecha_entregado(self):
         return self.__fecha_entregado
+    @fecha_entregado.setter
+    def fecha_entregado(self, value):
+        self.__fecha_entregado = value
 
     @property
     def estado(self):

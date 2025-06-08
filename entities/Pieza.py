@@ -27,7 +27,9 @@ class Pieza:
     @property
     def cantidad(self):
         return self.__cantidad
-
+    @cantidad.setter
+    def cantidad(self, value):
+        self.__cantidad = value
     @property
     def lote(self):
         return self.__lote
@@ -35,3 +37,6 @@ class Pieza:
     @property
     def reposicion(self):
         return self.__reposicion
+    def agregar_reposicion(self, reposicion):
+        if reposicion not in self.__reposicion:
+            self.__reposicion.append(reposicion)

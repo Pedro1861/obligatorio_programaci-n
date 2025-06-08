@@ -6,7 +6,7 @@ from entities.maquina import Maquina
 from entities.cliente import ClienteParticular, Empresa
 from entities.reposicion import Reposicion
 from entities.pedido import Pedido
-import datetime
+from datetime import datetime
 ###REGISTROS###
 
 
@@ -39,6 +39,7 @@ class Sistema():
         print("Piezas: ")
         faltante=0
         for piece in cls.lista_piezas:
+            faltante=0
             for pedido in cls.lista_pedidos_pendientes:
                 for requerimiento in pedido.maquina.requerimiento:
                     if requerimiento.pieza==piece:
@@ -62,7 +63,11 @@ class Sistema():
             pass
         print("Maquinas: \n")
         for i in self.lista_maquinas:
-            print(f"\nCodigo:{i.codigo}\n\nDescripcion:{i.desc}\n\nRequerimientos:")
+            if i.disponibilidad()==False:
+                estado="No disponible"
+            elif i.disponibilidad()==True:
+                estado="Disponible"
+            print(f"\nCodigo:{i.codigo}\nDescripcion:{i.desc}\nEstado: {estado}\nRequerimientos:")
             for j in i.requerimiento:
                 print(f" Codigo Pieza:{j.pieza.codigo}\n Cantidad Pieza: {j.cantidad}\n")
             print(f"Costo: {i.costo_produccion()}\n")
