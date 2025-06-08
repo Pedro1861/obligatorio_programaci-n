@@ -1,13 +1,13 @@
 from datetime import datetime
 
 class Pedido:
-    def __init__(self, cliente, maquina, fecha_recibido, fecha_entregado, estado, precio):
+    def __init__(self, cliente, maquina, fecha_recibido, fecha_entregado, estado):
         self.__cliente = cliente
         self.__maquina = maquina
         self.__fecha_recibido = fecha_recibido
         self.__fecha_entregado = fecha_entregado
         self.__estado = estado
-        self.__precio = precio
+
 
     @property
     def cliente(self):
@@ -29,13 +29,13 @@ class Pedido:
     def estado(self):
         return self.__estado
 
-    @property
-    def precio(self):
-        return self.__precio
-
     def get_precio(self):
-        return self.__precio
-    
+        precio=self.__maquina.costo_produccion()
+        if self.__cliente.cédula:
+            precio*=1.5
+        elif self.__cliente.RUT:
+            precio*=1.5*0.8 
+        return precio
     # NO SE COMO HACER PARA SEPARAR CLIENTE INDIVIDUAL DE EMPRESA, 
     # PORQUE SI ES INDIVIDUAL ES COSTO DE VENTA * 1.5 (EL COSTO DE VENTA +50%) 
     # Y SI ES EMPRESA ES EL PRECIO (COSTO DE VENTA * 1.5) * 0.8 

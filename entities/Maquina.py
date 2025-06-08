@@ -17,12 +17,12 @@ class Maquina():
     @property
     def desc(self):
         return self.__desc
-    def disponibilidad(self,disponible):
-        if self.__cantidad>=disponible:
-            return True
-        else:
-            return False
-        
+    def disponibilidad(self):
+        for requerimiento in self.__requerimiento:
+            if requerimiento.pieza.cantidad<requerimiento.cantidad:
+                return False
+        return True
+            
     def agregar_requerimiento(self,nuevo_req):
         self.__requerimiento.append(nuevo_req)
     
