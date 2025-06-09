@@ -32,17 +32,17 @@ class Pedido:
     def estado(self):
         return self.__estado
 
+    @estado.setter
+    def estado(self, value):
+        self.__estado = value
+        
     def get_precio(self):
         precio=self.__maquina.costo_produccion()
-        if self.__cliente.cédula:
+        if self.__cliente.cedula:
             precio*=1.5
         elif self.__cliente.RUT:
             precio*=1.5*0.8 
         return precio
-    # NO SE COMO HACER PARA SEPARAR CLIENTE INDIVIDUAL DE EMPRESA, 
-    # PORQUE SI ES INDIVIDUAL ES COSTO DE VENTA * 1.5 (EL COSTO DE VENTA +50%) 
-    # Y SI ES EMPRESA ES EL PRECIO (COSTO DE VENTA * 1.5) * 0.8 
-    # QUE SERIA EL 20% DE DESCUENTO POR SER EMPRESA
      
     
         

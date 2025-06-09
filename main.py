@@ -76,7 +76,7 @@ while menu!=3:
                     continue
                 while True:
                     try:
-                        costo_pieza=int(input("Brinda costo por unidad de la pieza: "))
+                        costo_pieza=int(input("Brinda costo por unidad de la pieza en USD: "))
                         if costo_pieza<0:
                             raise FueraDeRango
                         break
@@ -89,7 +89,7 @@ while menu!=3:
                         
                 while True:
                     try:
-                        lote_pieza=int(input("Brinda el tamanio del lote de reposicion: "))
+                        lote_pieza=int(input("Brinda el tamaño del lote de reposición: "))
                         if lote_pieza<0:
                             raise FueraDeRango
                         break
@@ -191,7 +191,7 @@ while menu!=3:
                         except ValueError:
                             print("\nError!Elija un valor adecuado\n")
                         except NoExiste:
-                            print("El codigo no pertenece a ninguna pieza")
+                            print("\nERROR: El codigo no pertenece a ninguna pieza\n")
                         except :
                             print("\nERROR INESPERADO: ingrese un nuevo valor\n")
                     
@@ -238,9 +238,9 @@ while menu!=3:
                             raise FueraDeRango
                         break
                     except ValueError:
-                        print("ERROR: Ingrese un número válido (1 o 2).")
+                        print("\nERROR: Ingrese un número válido (1 o 2).\n")
                     except FueraDeRango:
-                        print("ERROR: Ingrese un número válido (1 o 2).")
+                        print("\nERROR: Ingrese un número válido (1 o 2).\n")
                     except :
                         print("\nERROR INESPERADO: ingrese un nuevo valor\n")
             
@@ -252,17 +252,17 @@ while menu!=3:
                             if cédula<0:
                                 raise ValueError
                             for i in sistema.lista_particulares:
-                                if i.cédula==cédula:
+                                if i.cedula==cédula:
                                     raise YaExiste
                             if len(str(cédula)) != 8:
                                 raise FueraDeRango
                             break
                         except ValueError:
-                            print("ERROR: Ingrese un número válido para la cédula.")
+                            print("\nERROR: Ingrese un número válido para la cédula.\n")
                         except FueraDeRango:
-                            print("ERROR: La cédula debe tener 8 dígitos.")
+                            print("\nERROR: La cédula debe tener 8 dígitos.\n")
                         except YaExiste:
-                            print("ERROR: La cédula ya está registrada.")
+                            print("\nERROR: La cédula ya está registrada.\n")
                             print("Desea ingresar una nueva cédula? \n 1.SI \n 2.NO")
                             while True:
                                 try:
@@ -276,11 +276,12 @@ while menu!=3:
                                         print("Operación cancelada.")
                                         break
                                 except ValueError:
-                                    print("ERROR: Ingrese un número válido (1 o 2).")
+                                    print("\nERROR: Ingrese un número válido (1 o 2).\n")
                                 except FueraDeRango:
-                                    print("ERROR: Ingrese un número válido (1 o 2).")
+                                    print("\nERROR: Ingrese un número válido (1 o 2).\n")
                                 except :
                                     print("\nERROR INESPERADO: ingrese un nuevo valor\n")
+
                             if abortar:
                                 break
                         except :
@@ -290,21 +291,25 @@ while menu!=3:
                        
                     while True:
                         try:
-                            teléfono = input("Ingrese el teléfono celular del cliente: ")
-                            
-                            if not teléfono.isdigit():
-                                raise ValueError("Debe ingresar solo números.")
-                            if not teléfono.startswith("09"):
-                                raise ValueError("El número debe comenzar con 09.")
-                            if len(teléfono) != 9:
-                                raise ValueError("El número debe tener exactamente 9 dígitos.")
-                            
-                            break  
+                            teléfono = input("Ingrese el teléfono celular del cliente (asegurese que comience con 09): ")
 
-                        except ValueError as e:
-                            print(f"ERROR: {e}")
-                        except Exception as e:
-                            print(f"\nERROR INESPERADO: {e}\n")
+                            if not teléfono.isdigit():
+                                raise ValueError
+                            if not teléfono.startswith("09"):
+                                raise NoExiste
+                            if len(teléfono) != 9:
+                                raise FueraDeRango
+                            break
+
+                        except ValueError:
+                            print(f"\nERROR: Ingrese un número válido para el teléfono(>0).\n")
+                        except NoExiste:
+                            print("\nERROR: El teléfono debe comenzar con 09.\n")
+                        except FueraDeRango:
+                            print("\nERROR: El teléfono debe tener 9 dígitos.\n")
+                        except :
+                            print(f"\nERROR INESPERADO: ingrese un nuevo valor\n")
+                        
                     while True:
                         try:
                             nombre=input("ingrese nombre completo del cliente: ")
@@ -326,7 +331,7 @@ while menu!=3:
                                 raise ValueError
                             break
                         except ValueError:
-                            print("ERROR: Ingrese un correo electrónico válido.")
+                            print("\nERROR: Ingrese un correo electrónico válido.\n")
                         except :
                             print("\nERROR INESPERADO: ingrese un nuevo valor\n")
                     print("Cliente registrado con éxito!")
@@ -342,18 +347,17 @@ while menu!=3:
                             if rut<0:
                                 raise ValueError
                             for i in sistema.lista_empresas:
-                                if i.rut==rut:
+                                if i.RUT==rut:
                                     raise YaExiste
                             if len(str(rut)) !=11:
                                 raise FueraDeRango
                             break
                         except FueraDeRango:
-                            print("ERROR: El RUT debe tener 11 dígitos.")
+                            print("\nERROR: El RUT debe tener 11 dígitos.\n")
                         except ValueError:
-                            print("ERROR: Ingrese un número válido para el RUT.")
-                        
+                            print("\nERROR: Ingrese un número válido para el RUT.\n")
                         except YaExiste:
-                            print("ERROR: El RUT ya está registrado.")
+                            print("\nERROR: El RUT ya está registrado.\n")
                             print("Desea ingresar un nuevo RUT? \n 1.SI \n 2.NO")
                             while True:
                                 try:
@@ -367,9 +371,9 @@ while menu!=3:
                                         print("Operación cancelada.")
                                         break
                                 except ValueError:
-                                    print("ERROR: Ingrese un número válido (1 o 2).")
+                                    print("\nERROR: Ingrese un número válido (1 o 2).\n")
                                 except FueraDeRango:
-                                    print("ERROR: Ingrese un número válido (1 o 2).")
+                                    print("\nERROR: Ingrese un número válido (1 o 2).\n")
                                 except :
                                     print("\nERROR INESPERADO: ingrese un nuevo valor\n")
                             if abortar:
@@ -385,7 +389,7 @@ while menu!=3:
                                 raise ValueError
                             break
                         except ValueError:
-                            print("ERROR: Ingrese un nombre válido.")
+                            print("\nERROR: Ingrese un nombre válido.\n")
                         except :
                             print("\nERROR INESPERADO: ingrese un nuevo valor\n")
                     while True:
@@ -395,32 +399,40 @@ while menu!=3:
                                 raise ValueError
                             break
                         except ValueError:
-                            print("ERROR: Ingrese una página web válida.")
+                            print("\nERROR: Ingrese una página web válida.\n")
                         except :
-                            print("ERROR INESPERADO: ingrese un nuevo valor")
+                            print("\nERROR INESPERADO: ingrese un nuevo valor\n")
 
                     while True:
                         try:
-                            teléfono=int(input("Ingrese teléfono de contacto: "))
-                            if teléfono<0:
+                            teléfono=input("Ingrese teléfono de contacto(asegurese que comienze con 09): ")
+                            if not teléfono.isdigit():
+                                raise ValueError
+                            if not teléfono.startswith("09"):
+                                raise NoExiste
+                            if len(teléfono) != 9:
                                 raise FueraDeRango
                             break
                         except ValueError:
-                            print("ERROR: Ingrese un número válido para el teléfono.")
+                            print("\nERROR: Ingrese un número válido para el teléfono(>0).\n")
                         except FueraDeRango:
-                            print("\nError! El teléfono no puede ser negativo\n")
+                            print("\nError! El teléfono debe tener 9 dígitos\n")
+                        except NoExiste:
+                            print("\nERROR: El teléfono debe comenzar con 09.\n")
                         except :
-                            print("ERROR INESPERADO: ingrese un nuevo valor")
+                            print("\nERROR INESPERADO: ingrese un nuevo valor\n")
                     while True:
                         try:
                             correo_electrónico= input("ingrese el correo electrónico del cliente: ")
+                            if "@" not in correo_electrónico:
+                                raise ValueError
                             if correo_electrónico=="":
                                 raise ValueError
                             break
                         except ValueError:
-                            print("ERROR: Ingrese un correo válido.")
+                            print("\nERROR: Ingrese un correo válido.\n")
                         except :
-                            print("ERROR INESPERADO: ingrese un nuevo valor")
+                            print("\nERROR INESPERADO: ingrese un nuevo valor\n")
                     print("El cliente fue registrado con éxito!")
 
                     sistema.registrar_cliente_Empresa(rut, nombre, página_web, teléfono, correo_electrónico)
@@ -451,11 +463,11 @@ while menu!=3:
                             raise NoExiste
                         break
                     except ValueError:
-                        print("ERROR: Ingrese un número válido para el ID del cliente.")
+                        print("\nERROR: Ingrese un número válido para el ID del cliente.\n")
                     except NoExiste:
-                        print("ERROR: El ID del cliente no existe. Por favor, ingrese un ID válido.")
+                        print("\nERROR: El ID del cliente no existe. Por favor, ingrese un ID válido.\n")
                     except :
-                        print("ERROR INESPERADO: ingrese un nuevo valor")
+                        print("\nERROR INESPERADO: ingrese un nuevo valor\n")
 
                 print("seleccione la máquina que desea registrar un pedido: ")
                 sistema.listar_maquinas()
@@ -471,12 +483,12 @@ while menu!=3:
                             raise NoExiste
                         break
                     except NoExiste:
-                        print("ERROR: El código de la máquina no existe. Por favor, ingrese un código válido.")
+                        print("\nERROR: El código de la máquina no existe. Por favor, ingrese un código válido.\n")
                         
                     except ValueError:
-                        print("ERROR: Ingrese un número válido para el código de la máquina.")
+                        print("\nERROR: Ingrese un número válido para el código de la máquina.\n")
                     except :
-                        print("ERROR INESPERADO: ingrese un nuevo valor")
+                        print("\nERROR INESPERADO: ingrese un nuevo valor\n")
                         
                 sistema.registrar_pedido(cliente_pedido,maquina_pedido)
                     

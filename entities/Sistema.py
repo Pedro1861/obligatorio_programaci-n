@@ -1,6 +1,5 @@
 
 from entities.pieza import Pieza
-from entities.errores import FueraDeRango, YaExiste
 from entities.requerimiento import Requerimiento
 from entities.maquina import Maquina
 from entities.cliente import ClienteParticular, Empresa
@@ -46,7 +45,7 @@ class Sistema():
                         faltante+=requerimiento.cantidad-piece.cantidad
                         if faltante<0:
                             faltante=0
-            print(f"\n Codigo: {piece.codigo}\n Descripcion: {piece.desc}\n Costo: {piece.costo}\n Cantidad: {piece.cantidad}\n Lote: {piece.lote}")
+            print(f"\n Codigo: {piece.codigo}\n Descripcion: {piece.desc}\n Costo: {piece.costo} USD\n Cantidad: {piece.cantidad}\n Lote: {piece.lote}")
             if faltante!=0:
                 print(f"Cantidad faltante:{faltante}\nLotes recomendados reponer:{round(faltante/piece.lote)}")
     ####PIEZAS####
@@ -70,7 +69,7 @@ class Sistema():
             print(f"\nCodigo:{i.codigo}\nDescripcion:{i.desc}\nEstado: {estado}\nRequerimientos:")
             for j in i.requerimiento:
                 print(f" Codigo Pieza:{j.pieza.codigo}\n Cantidad Pieza: {j.cantidad}\n")
-            print(f"Costo: {i.costo_produccion()}\n")
+            print(f"Costo: {i.costo_produccion()} USD\n")
             print("---------------------------")
         
     ####MAQUINAS####
@@ -95,20 +94,20 @@ class Sistema():
         for cliente in self.lista_clientes:
             n+=1
             if cliente in self.lista_particulares:
-                print (f"{n}. Cliente: {cliente.nombre}, ID: {cliente.id}, Tipo: particular, Cédula: {cliente.cédula}, Teléfono: {cliente.telefono}, Correo: {cliente.correo_electrónico}")
+                print (f"{n}. Cliente: {cliente.nombre}, ID: {cliente.id}, Tipo: particular, Cédula: {cliente.cedula}, Teléfono: {cliente.telefono}, Correo: {cliente.correo_electronico}")
             elif cliente in self.lista_empresas:
-                print (f"{n}. Cliente: {cliente.nombre}, ID: {cliente.id}, Tipo: empresa, RUT: {cliente.rut}, Página web: {cliente.página_web}, Teléfono: {cliente.telefono}, Correo: {cliente.correo_electrónico}")
+                print (f"{n}. Cliente: {cliente.nombre}, ID: {cliente.id}, Tipo: empresa, RUT: {cliente.RUT}, Página web: {cliente.web}, Teléfono: {cliente.telefono}, Correo: {cliente.correo_electronico}")
 
     ####CLIENTE####
 
     ####REPOSICION####
-    def registrar_reposicion(self,pieza,cantidad):
-        nueva_reposicion=Reposicion(pieza,cantidad)
+    def registrar_reposicion(self,pieza,cantidad_lotes):
+        nueva_reposicion=Reposicion(pieza,cantidad_lotes)
         pieza.reposicion.append(nueva_reposicion)
         for pieza_navegar in self.lista_piezas:
             if pieza_navegar.codigo==pieza.codigo:
-                pieza_navegar.cantidad+=cantidad
-                print(f"Reposición registrada. Pieza: {pieza_navegar.desc}, Cantidad: {cantidad}")
+                pieza_navegar.cantidad+=cantidad_lotes*pieza_navegar.lote
+                print(f"Reposición registrada. Pieza: {pieza_navegar.desc}, Cantidad: {cantidad_lotes*pieza_navegar.lote}")
 
         
     ####REPOSICION####
@@ -139,7 +138,7 @@ class Sistema():
         print(f"Pedido registrado con éxito!")
 
     def completar_pedido(self):
-        for pedido_pendiente in self.lista_pedidos_pendientes:
+        for pedido_pendiente in self.lista_pedidos_pendientes[:]:
             if pedido_pendiente.maquina.disponibilidad()==True:
                 pedido_pendiente.fecha_entregado=datetime.now()
                 pedido_pendiente.estado="entregado"
@@ -154,20 +153,37 @@ class Sistema():
         n=0
         for pedido in self.lista_pedidos:
                 n+=1
-                print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.desc}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.get_precio()}")
+                print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.desc}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.get_precio()} USD")
     def listar_pedidos_filtrados(self, opcion_estado):
         n=0
         if opcion_estado ==1:
+            if self.lista_pedidos_pendientes==[]:
+                print("No hay pedidos pendientes registrados.")
+                return
             for pedido in self.lista_pedidos_pendientes:
                 n+=1
-                print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.desc}, Fecha Recibido: {pedido.fecha_recibido}, Estado: {pedido.estado}, Precio: {pedido.get_precio()}")
+                print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.desc}, Fecha Recibido: {pedido.fecha_recibido}, Estado: {pedido.estado}, Precio: {pedido.get_precio()} USD")
         elif opcion_estado ==2:
+            existe=False
+            for pedido in self.lista_pedidos:
+                if pedido.estado=="entregado":
+                    existe=True
+            if not existe:
+                print("No hay pedidos entregados registrados.")
+                return
             n=0
             for pedido in self.lista_pedidos:
                 if pedido.estado=="entregado":
                     n+=1
-                    print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.desc}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.get_precio()}")
+                    print(f"{n}. Pedido. Cliente: {pedido.cliente.nombre}, Maquina: {pedido.maquina.desc}, Fecha Recibido: {pedido.fecha_recibido}, Fecha Entregado: {pedido.fecha_entregado}, Estado: {pedido.estado}, Precio: {pedido.get_precio()} USD")
     def contabilidad(self):
+        existe=False
+        for pedido in self.lista_pedidos:
+            if pedido.estado=="entregado":
+                existe=True
+        if not existe:
+            print("No hay pedidos entregados registrados para calcular la contabilidad.")
+            return
         costo_total=0
         ingreso_total=0
         for pedido in self.lista_pedidos:
